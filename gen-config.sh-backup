@@ -1,0 +1,149 @@
+#!/bin/sh
+
+##################GLOBALS#################
+STARTCTID=300
+ENDCTID=350
+DOMAIN="virtual-labs.ac.in"
+TESTSUBDOMAIN="test"
+ENV="test"   # Leave it blank for production
+CONFIG="vlabs.config"
+IPPREFIX="10.4.13."
+##########################################
+
+###############DEFAULTS###################
+TEMPLATE=centos-6.3-x86_64 # Default Template
+NAMESERVER=10.4.12.157
+DISKSPACE=1G
+RAM=128M
+HOSTNAME=labxxx
+IPADD=10.10.10.10
+PKGMGR="yum"   # Default Package Manager
+DEF="%"  # Indicator for taking default values
+##########################################
+
+###############OPENVZ COMMANDS############
+VZCTL="vzctl"
+VZDUMP="vzdump"
+VZLIST="vzlist"
+##########################################
+
+vid_list=$(vzlist -H -a -o ctid -s ctid| sed 's/^[ \t]*//g')
+vid_list_available=
+
+ctid=$STARTCTID
+
+for vid in $vid_list; 
+do
+ if [ "$ctid" == "$vid" ] ; then 
+   echo $ctid >/dev/null
+ else
+   while [ "$ctid" != "$vid" ] ; do
+    vid_list_available="$vid_list_available $ctid"
+    ctid=`expr $ctid + 1`
+   done
+ fi
+ctid=`expr $ctid + 1`
+done
+
+if [ "$ctid" != "$ENDCTID" ] ; then 
+ while [ "$ctid" != "$ENDCTID" ] ; do
+  vid_list_available="$vid_list_available $ctid"
+  ctid=`expr $ctid + 1`
+ done
+fi
+
+echo $vid_list_available
+
+# Delete older config if exists
+if [ -f $CONFIG ]; then
+ rm -rf $CONFIG
+fi
+
+vhost_list=$(vzlist -H -a -o hostname -s hostname| sed 's/^[ \t]*//g')
+
+cat *_deps | sort -u | while read line;
+ do
+  labid=`echo $line | cut -d' ' -f1`
+  repotype=`echo $line | cut -d' ' -f2`
+  reponame=`echo $line | cut -d' ' -f3` 
+  ostemplate=`echo $line | cut -d' ' -f4`
+  diskspace=`echo $line | cut -d' ' -f5`
+  ram=`echo $line | cut -d' ' -f6`
+  deps=`echo $line | cut -d' ' -f7-16` 
+
+  # Ignore if header
+  if [ "$labid" == "labid" ] ; then
+   continue
+  fi
+
+  # Check for invalid data
+  if [ "$labid" == "" ] || [ "$repotype" == "" ] || [ "$reponame" == "" ] ; then 
+    echo "Invalid data found skipping...."
+  fi
+ 
+  #Set defaults for non-mandatory fields
+  if [ "$ostemplate" == "" ] || [ "$ostemplate" == "$DEF" ] ; then
+    ostemplate=$OSTEMPLATE
+  fi
+  if [ "$diskspace" == "" ] || [ "$diskspace" == "$DEF" ] ; then 
+    diskspace=$DISKSPACE
+  fi
+  if [ "$ram" == "" ] || [ "$ram" == "$DEF" ] ; then
+    ram=$RAM
+  fi
+
+  # If Environment is test append test to the hostname 
+  if [ "$ENV" != "" ]; then
+    labid="$labid-$ENV"
+  fi
+
+  echo "########$labid############" >> $CONFIG
+
+  # Compare hosts and see what needs to be done
+  vhost=$(echo $vhost_list | cut -d' ' -f1)
+
+  if [ "$labid" \< "$vhost" ]; then 
+    # Newly added lab - mark for creation
+    # Pick next available id from vid_list_available
+    ctid=$(echo $vid_list_available | cut -d' ' -f1)  
+    # Strip the ctid we used 
+    vid_list_available=$(echo $vid_list_available | cut -d' ' -f2-400)
+    echo "$VZCTL start $ctid --ostemplate $ostemplate --hostname $labid --ipadd $IPPREFIX$ctid --diskspace $diskspace" >> $CONFIG
+    echo "$VZCTL start $ctid" >> $CONFIG
+    echo "$VZCTL set $ctid --nameserver $NAMESERVER --ram $ram --save" >> $CONFIG
+  else 
+    while [ "$labid" \> "$vhost" ] ;
+     do
+       # Extra container running mark for deletion
+       delctid=$($VZLIST -H -a -o ctid -h $vhost | sed 's/^[ \t]*//g')
+       echo "$VZCTL stop $delctid" >> $CONFIG
+       echo "$VZCTL destroy $delctid" >> $CONFIG
+       vhost_list=$(echo $vhost_list | cut -d' ' -f2-400)
+       vhost=$(echo $vhost_list | cut -d' ' -f1)
+     done
+
+    if [ "$labid" == "$vhost" ]; then
+     # Container and config both exist , just update config if required
+     echo "$VZCTL set $ctid --diskspace $diskspace --ram $ram --nameserver $NAMESERVER --save" >> $CONFIG
+    fi
+  vhost_list=$(echo $vhost_list | cut -d' ' -f2-400)
+  fi
+
+  # Check OS Architecture and Install dependencies (1-10)
+  OSARCH=$(echo $ostemplate | cut -d'-' -f1)
+  case $OSARCH in 
+    debian | ubuntu)
+      PKGMGR="apt-get"
+      ;;
+    centos | fedora | scientific | suse | *)
+      PKGMGR="yum"
+      ;;
+  esac
+
+  if [ "$deps" != "" ]; then
+     echo "$VZCTL exec $ctid \"$PKGMGR install $deps\" " >> $CONFIG
+  fi
+
+  echo "" >> $CONFIG
+done
+
