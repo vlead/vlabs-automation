@@ -1,0 +1,21 @@
+
+
+case $1 in
+ stop)
+  OPER="stop"
+  ;;
+ start)
+  OPER="start"
+  ;; 
+ destroy)
+  OPER="destroy"
+  ;;
+esac 
+
+sctid=`echo $2 | cut -d'-' -f1`
+ectid=`echo $2 | cut -d'-' -f2`
+while [ "$sctid" \< "$ectid" ] ; do
+ echo $sctid
+ vzctl $OPER $sctid
+ sctid=`expr $sctid + 1`
+done

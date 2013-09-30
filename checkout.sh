@@ -4,6 +4,8 @@ USER=svnadmin
 ROOTDIR=$PWD
 DEPLOYDIR="/var/www/labs/"
 DEPSFILE=iiith_deps
+BUILDDIR=./labs
+REPOHOST="svn.virtual-labs.ac.in"
 
 cat $DEPSFILE | while read line ;
 do
@@ -20,14 +22,17 @@ do
 
    # Bazaar repository
    if [ $repotype == "bzr" ]; then
-    bzr branch bzr+ssh://$USER@bzr.virtual-labs.ac.in/labs/$labid/bzr/$reponame/trunk $labid
+    bzr branch bzr+ssh://$USER@$REPOHOST/labs/$labid/bzr/$reponame/trunk $BUILDDIR/$labid
    fi
 
    # Git repository
+   if [ $repotype == "git" ]; then
+    git clone git+ssh://$USER@$REPOHOST/labs/$labid/git/$reponame $BUILDDIR/$labid
+   fi
 
    # SVN repository
    if [ $repotype == "svn" ]; then
-   svn co svn+ssh://svnadmin@svn.virtual-labs.ac.in/labs/$labid/svn/$reponame $labid
+   svn co svn+ssh://$USER@$REPOHOST/labs/$labid/svn/$reponame $BUILDDIR/$labid
    fi
 ##########BUILD####################
 #  cd $labid/src

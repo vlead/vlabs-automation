@@ -1,11 +1,11 @@
 #!/bin/sh
 
-i="test1 test2 test3 test4 test5"
+vhost_list=$(vzlist -a -o hostname -s hostname)
 
-for j in $i; do
+for j in $vhost_list; do
   echo $j
-  i=$(echo $i | cut -d' ' -f2-100)
-  echo $i
+  vhost_list=$(echo $vhost_list | cut -d' ' -f2-100)
+  echo $vhost_list
 done
 
-echo $i
+echo $vhost_list

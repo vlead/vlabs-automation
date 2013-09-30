@@ -42,4 +42,4 @@ modflag labid repotype reponame ostemplate diskspace ram deps1 deps2 deps3 deps4
 0 eerc03 svn CEVL2 ubuntu-12.04-x86_64
 0 eerc04 svn CEVL3 ubuntu-12.04-x86_64
 0 eerc05 svn MEVL ubuntu-12.04-x86_64
-0 phy14 svn physc ubuntu-12.04-x86_64
+0 phy14 git physc ubuntu-12.04-x86_64

@@ -7,8 +7,11 @@ DOMAIN="local"
 TESTSUBDOMAIN="test"
 ENV="test"   # Leave it blank for production
 CONFIGPREFIX="vlabs.config"
-PARALLEL="1"
+PARALLEL="3"
 IPPREFIX="10.4.13."
+REPOUSER="svnadmin"
+REPOHOST="svn.virtual-labs.ac.in"
+BUILDDIR="~"
 ##########################################
 
 ###############DEFAULTS###################
@@ -58,7 +61,7 @@ if [ "$ctid" != "$ENDCTID" ] ; then
  done
 fi
 
-echo $vid_list_available
+#echo $vid_list_available
 
 # Delete older configs if exists
 i=0
@@ -69,7 +72,7 @@ while [ "$i" \< "$PARALLEL" ] ; do
   i=`expr $i + 1`
 done
 
-vhost_list=$(vzlist -H -a -o hostname -s hostname| sed 's/^[ \t]*//g')
+vhost_list=$(vzlist -H -a -o hostname -s hostname| cut -d'.' -f1 | sed 's/^[ \t]*//g')
 
 COUNT=0  # Total no of configs written
 cat *_deps | sort -u | while read line;
@@ -95,13 +98,13 @@ cat *_deps | sort -u | while read line;
   fi
  
   #Set defaults for non-mandatory fields
-  if [ "$ostemplate" == "" ] || [ "$ostemplate" == "$DEF" ] ; then
+  if [ "$ostemplate" == "" ] || [ "$ostemplate" == "$DEFAULT" ] ; then
     ostemplate=$OSTEMPLATE
   fi
-  if [ "$diskspace" == "" ] || [ "$diskspace" == "$DEF" ] ; then 
+  if [ "$diskspace" == "" ] || [ "$diskspace" == "$DEFAULT" ] ; then 
     diskspace=$DISKSPACE
   fi
-  if [ "$ram" == "" ] || [ "$ram" == "$DEF" ] ; then
+  if [ "$ram" == "" ] || [ "$ram" == "$DEFAULT" ] ; then
     ram=$RAM
   fi
 
@@ -116,21 +119,20 @@ cat *_deps | sort -u | while read line;
   # Choose config-file
   CONFIG=$CONFIGPREFIX.`expr $COUNT % $PARALLEL`
 
-  while [ "$labid" \> "$vhost" ] ;
+  while [ "$labid" \> "$vhost" ] && [ "$vhost" != "" ] ;
    do
-       # Extra container running mark for deletion
-       delctid=$($VZLIST -H -a -o ctid -h $vhost.$DOMAIN | sed 's/^[ \t]*//g')
-       echo "########$vhost############" >> $CONFIG
-       echo "$VZCTL stop $delctid" >> $CONFIG
+        # Extra container running mark for deletion
+        delctid=$($VZLIST -H -a -o ctid -h $vhost.$DOMAIN | sed 's/^[ \t]*//g')
+        echo "########$vhost############" >> $CONFIG
+        echo "$VZCTL stop $delctid" >> $CONFIG
 #       echo "$VZCTL destroy $delctid" >> $CONFIG
-       echo "" >> $CONFIG
-       vhost_list=$(echo $vhost_list | cut -d' ' -f2-400)
-       vhost=$(echo $vhost_list | cut -d' ' -f1)
-       COUNT=`expr $COUNT + 1`
+        echo "" >> $CONFIG
+        vhost_list=$(echo $vhost_list | cut -d' ' -f2-400)
+        vhost=$(echo $vhost_list | cut -d' ' -f1)
+        COUNT=`expr $COUNT + 1`
    done
 
   echo "########$labid############" >> $CONFIG
-
   if [ "$labid" == "$vhost" ]; then
      # Container and config both exist , just update config if modflag is set
    if [ "$modflag" == "1" ]; then 
@@ -189,9 +191,24 @@ cat *_deps | sort -u | while read line;
   done
 
   # Checkout the code
+  # Assuming default is bzr repository
+     BZREXTRA="/trunk"
+     CREATEOPER="branch"
+     UPDATEOPER="pull"
+  if [ "$repotype" == "git" ] ; then
+     BZREXTRA=""
+     CREATEOPER="clone"
+     UPDATEOPER="pull"
+  fi
+  if [ "$repotype" == "svn" ] ; then
+     BZREXTRA=""
+     CREATEOPER="checkout"
+     UPDATEOPER="update"
+  fi
   
+  echo "$VZCTL exec $ctid \"$repotype $CREATEOPER $repotype+ssh://$REPOUSER@$REPOHOST/labs/$labid/$repotype/$reponame$BZREXTRA $BUILDDIR/$labid \" " >> $CONFIG 
+
   echo "" >> $CONFIG
-  echo $vhost_list
 done
 
 
