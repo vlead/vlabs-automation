@@ -1,45 +1,44 @@
-modflag labid repotype reponame ostemplate diskspace ram deps1 deps2 deps3 deps4 deps5 deps6 deps7 deps8 deps9 deps10 serv1 serv2 serv3 serv4 serv5 serv6 serv7 serv8 serv9 serv10
-0 ccnsb01 svn Repo_lab_1 ubuntu-12.04-x86_64 % % 
-0 ccnsb02 svn Repo_lab2_mod ubuntu-12.04-x86_64 % %
-0 ccnsb03 svn Repo_lab_3 ubuntu-12.04-x86_64
-0 ccnsb04 svn repo ubuntu-12.04-x86_64
-0 ccnsb05 svn Repo_CD_4 ubuntu-12.04-x86_64
-0 ccnsb06 svn apc_new ubuntu-12.04-x86_64
-0 ccnsb07 svn ccnsb07 ubuntu-12.04-x86_64
-0 cse01 svn DS_NEW ubuntu-12.04-x86_64
-0 cse02 svn programming ubuntu-12.04-x86_64
-0 cse04 svn problem_solving ubuntu-12.04-x86_64
-0 cse05 svn popl-vlab ubuntu-12.04-x86_64
-0 cse06 svn new_release ubuntu-12.04-x86_64
-0 cse07 svn FirstMining ubuntu-12.04-x86_64
-0 cse08 svn se ubuntu-12.04-x86_64 
-0 cse09 svn cse09 ubuntu-12.04-x86_64
-0 cse10 svn cse10 ubuntu-12.04-x86_64
-0 cse11 svn ComputerSystemOrganization ubuntu-12.04-x86_64
-0 cse13 svn Advanced_VLSI ubuntu-12.04-x86_64
-0 cse14 svn VLSI-Lab ubuntu-12.04-x86_64
-0 cse15 svn repo_dld ubuntu-12.04-x86_64
-0 cse16 svn Beta ubuntu-12.04-x86_64
-0 cse17 svn final ubuntu-12.04-x86_64
-0 cse18 svn CG_Vlabs ubuntu-12.04-x86_64
-0 cse19 svn CSE19a ubuntu-12.04-x86_64 % % libhighgui-dev libhighgui2.3 libcv-dev libcv2.3 php5-gd % % % % % httpd
-0 cse20 svn test ubuntu-12.04-x86_64
-0 cse21 svn Cse21_repo ubuntu-12.04-x86_64 
-0 cse22 svn Beta ubuntu-12.04-x86_64
-0 cse23 svn CL-vlab1 ubuntu-12.04-x86_64
-0 cse24 svn NLP-vlab2 ubuntu-12.04-x86_64
-0 cse29 svn newui ubuntu-12.04-x86_64
-0 cse30 svn test1 ubuntu-12.04-x86_64 
-0 ece04 svn FPGA-lab ubuntu-12.04-x86_64
-0 ece05 svn vlsi_vlab ubuntu-12.04-x86_64
-0 ece06 svn dspVlab ubuntu-12.04-x86_64
-0 ece08 svn test14 ubuntu-12.04-x86_64
-0 ece09 svn Wireless ubuntu-12.04-x86_64
-0 mech08 svn vlkb_svn ubuntu-12.04-x86_64
-0 emt svn emt_new ubuntu-12.04-x86_64
-0 eerc01 svn CEVL ubuntu-12.04-x86_64
-0 eerc02 svn CEVL1 ubuntu-12.04-x86_64
-0 eerc03 svn CEVL2 ubuntu-12.04-x86_64
-0 eerc04 svn CEVL3 ubuntu-12.04-x86_64
-0 eerc05 svn MEVL ubuntu-12.04-x86_64
-0 phy14 git physc ubuntu-12.04-x86_64
+labid modflag repotype reponame ostemplate diskspace ram deps1 deps2 deps3 deps4 deps5 deps6 deps7 deps8 deps9 deps10 serv1 serv2 serv3 serv4 serv5 serv6 serv7 serv8 serv9 serv10
+ccnsb01 0 svn Repo_lab_1 ubuntu-12.04-x86_64 % % 
+ccnsb02 0 svn Repo_lab2_mod ubuntu-12.04-x86_64 % %
+ccnsb03 0 svn Repo_lab_3 ubuntu-12.04-x86_64
+ccnsb04 0 svn repo ubuntu-12.04-x86_64
+ccnsb05 0 svn Repo_CD_4 ubuntu-12.04-x86_64
+ccnsb06 0 svn apc_new ubuntu-12.04-x86_64
+ccnsb07 0 svn ccnsb07 ubuntu-12.04-x86_64
+cse01 0 svn DS_NEW ubuntu-12.04-x86_64
+cse02 0 svn programming ubuntu-12.04-x86_64
+cse04 0 svn problem_solving ubuntu-12.04-x86_64
+cse05 0 svn popl-vlab ubuntu-12.04-x86_64
+cse06 0 svn new_release ubuntu-12.04-x86_64
+cse07 0 svn FirstMining ubuntu-12.04-x86_64
+cse08 0 svn se ubuntu-12.04-x86_64 
+cse09 0 svn cse09 ubuntu-12.04-x86_64
+cse10 0 svn cse10 ubuntu-12.04-x86_64
+cse11 0 svn ComputerSystemOrganization ubuntu-12.04-x86_64
+cse13 0 svn Advanced_VLSI ubuntu-12.04-x86_64
+cse14 0 svn VLSI-Lab ubuntu-12.04-x86_64
+cse15 0 svn repo_dld ubuntu-12.04-x86_64
+cse16 0 svn Beta ubuntu-12.04-x86_64
+cse17 0 svn final ubuntu-12.04-x86_64
+cse18 0 svn CG_Vlabs ubuntu-12.04-x86_64
+cse19 0 svn CSE19a ubuntu-12.04-x86_64 % % libhighgui-dev libhighgui2.3 libcv-dev libcv2.3 php5-gd % % % % % httpd
+cse20 0 svn test ubuntu-12.04-x86_64
+cse21 0 svn Cse21_repo ubuntu-12.04-x86_64 
+cse22 0 svn Beta ubuntu-12.04-x86_64
+cse23 0 svn CL-vlab1 ubuntu-12.04-x86_64
+cse24 0 svn NLP-vlab2 ubuntu-12.04-x86_64
+cse29 0 svn newui ubuntu-12.04-x86_64
+cse30 0 svn test1 ubuntu-12.04-x86_64 
+ece04 0 svn FPGA-lab ubuntu-12.04-x86_64
+ece05 0 svn vlsi_vlab ubuntu-12.04-x86_64
+ece06 0 svn dspVlab ubuntu-12.04-x86_64
+ece09 0 svn Wireless ubuntu-12.04-x86_64
+mech08 0 svn vlkb_svn ubuntu-12.04-x86_64
+emt 0 svn emt_new ubuntu-12.04-x86_64
+eerc01 0 svn CEVL ubuntu-12.04-x86_64
+eerc02 0 svn CEVL1 ubuntu-12.04-x86_64
+eerc03 0 svn CEVL2 ubuntu-12.04-x86_64
+eerc04 0 svn CEVL3 ubuntu-12.04-x86_64
+eerc05 0 svn MEVL ubuntu-12.04-x86_64
+phy14 0 git physc ubuntu-12.04-x86_64

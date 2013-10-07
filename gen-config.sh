@@ -7,7 +7,7 @@ DOMAIN="local"
 TESTSUBDOMAIN="test"
 ENV="test"   # Leave it blank for production
 CONFIGPREFIX="vlabs.config"
-PARALLEL="3"
+PARALLEL="1"
 IPPREFIX="10.4.13."
 REPOUSER="svnadmin"
 REPOHOST="svn.virtual-labs.ac.in"
@@ -53,6 +53,7 @@ do
  fi
 ctid=`expr $ctid + 1`
 done
+vid_list_available="$vid_list_available "
 
 if [ "$ctid" != "$ENDCTID" ] ; then 
  while [ "$ctid" != "$ENDCTID" ] ; do
@@ -73,12 +74,14 @@ while [ "$i" \< "$PARALLEL" ] ; do
 done
 
 vhost_list=$(vzlist -H -a -o hostname -s hostname| cut -d'.' -f1 | sed 's/^[ \t]*//g')
+vhost_list="$vhost_list "  #Append a space
 
 COUNT=0  # Total no of configs written
-cat *_deps | sort -u | while read line;
+IFS=$'\n'
+for line in $(cat *_deps | sort -u);
  do
-  modflag=`echo $line | cut -d' ' -f1`
-  labid=`echo $line | cut -d' ' -f2`
+  labid=`echo $line | cut -d' ' -f1`
+  modflag=`echo $line | cut -d' ' -f2`
   repotype=`echo $line | cut -d' ' -f3`
   reponame=`echo $line | cut -d' ' -f4` 
   ostemplate=`echo $line | cut -d' ' -f5`
@@ -132,10 +135,11 @@ cat *_deps | sort -u | while read line;
         COUNT=`expr $COUNT + 1`
    done
 
-  echo "########$labid############" >> $CONFIG
   if [ "$labid" == "$vhost" ]; then
      # Container and config both exist , just update config if modflag is set
    if [ "$modflag" == "1" ]; then 
+     echo "########$labid############" >> $CONFIG
+     ctid=$($VZLIST -H -a -o ctid -h $vhost.$DOMAIN | sed 's/^[ \t]*//g')
      echo "$VZCTL set $ctid --diskspace $diskspace --ram $ram --nameserver $NAMESERVER --save" >> $CONFIG
      COUNT=`expr $COUNT + 1`
    fi
@@ -144,6 +148,9 @@ cat *_deps | sort -u | while read line;
     # Newly added lab - mark for creation
     # Pick next available id from vid_list_available
     ctid=$(echo $vid_list_available | cut -d' ' -f1)  
+    # Force modflag=1
+    modflag=1
+    echo "########$labid############" >> $CONFIG
     # Strip the ctid we used 
     vid_list_available=$(echo $vid_list_available | cut -d' ' -f2-400)
     echo "$VZCTL create $ctid --ostemplate $ostemplate --hostname $labid.$DOMAIN --ipadd $IPPREFIX$ctid --diskspace $diskspace" >> $CONFIG
@@ -152,68 +159,70 @@ cat *_deps | sort -u | while read line;
     COUNT=`expr $COUNT + 1`
   fi
 
-  # Check OS Architecture and Install dependencies (1-10)
-  OSARCH=$(echo $ostemplate | cut -d'-' -f1)
-  case $OSARCH in 
-    debian | ubuntu)
-      PKGMGR="apt-get"
-      PKGINSTALL="install"
-      PKGREMOVE="remove"
-      SRVMGR="update-rc.d"
-      SRVADD=""
-      SRVENABLE="enable"
-      SRVDISABLE="disable"
-      SRVREMOVE="remove"
-      ;;
+  if [ "$modflag" == 1 ] ; then
+    # Check OS Architecture and Install dependencies (1-10)
+    OSARCH=$(echo $ostemplate | cut -d'-' -f1)
+    case $OSARCH in 
+      debian | ubuntu)
+        PKGMGR="apt-get"
+        PKGINSTALL="install"
+        PKGREMOVE="remove"
+        SRVMGR="update-rc.d"
+        SRVADD=""
+        SRVENABLE="enable"
+        SRVDISABLE="disable"
+        SRVREMOVE="remove"
+        ;;
     centos | fedora | scientific | suse | *)
-      PKGMGR="yum"
-      PKGINSTALL="install"
-      PKGREMOVE="remove"
-      SRVMGR="chkconfig"
-      SRVADD="--add"
-      SRVENABLE="on"
-      SRVDISABLE="off"
-      SRVREMOVE="--del"
-      ;;
-  esac
+        PKGMGR="yum"
+        PKGINSTALL="install"
+        PKGREMOVE="remove"
+        SRVMGR="chkconfig"
+        SRVADD="--add"
+        SRVENABLE="on"
+        SRVDISABLE="off"
+        SRVREMOVE="--del"
+        ;;
+    esac
 
-  # Install Dependencies
-  for dep in $deps ; 
-  do
-    echo "$VZCTL exec $ctid \"$PKGMGR $PKGINSTALL $dep\" " >> $CONFIG
-  done 
+    # Set proxy for access to internet
+    echo $VZCTL exec $ctid \"export http_proxy="http://proxy.iiit.ac.in:8080\" " >> $CONFIG
+    # Install Dependencies
+    for dep in $deps ; 
+    do
+      echo "$VZCTL exec $ctid \"$PKGMGR $PKGINSTALL $dep -y\" " >> $CONFIG
+    done 
  
-  # Install and enable services 
-  for serv in $servs ; 
-  do
-    echo "$VZCTL exec $ctid \"$SRVMGR $SRVADD $serv\" " >> $CONFIG
-    echo "$VZCTL exec $ctid \"$SRVMGR $serv $SRVENABLE\" " >> $CONFIG
-  done
+    # Install and enable services 
+    for serv in $servs ; 
+    do
+      echo "$VZCTL exec $ctid \"$SRVMGR $SRVADD $serv\" " >> $CONFIG
+      echo "$VZCTL exec $ctid \"$SRVMGR $serv $SRVENABLE\" " >> $CONFIG
+    done
 
-  # Checkout the code
-  # Assuming default is bzr repository
-     BZREXTRA="/trunk"
-     CREATEOPER="branch"
-     UPDATEOPER="pull"
-  if [ "$repotype" == "git" ] ; then
-     BZREXTRA=""
-     CREATEOPER="clone"
-     UPDATEOPER="pull"
-  fi
-  if [ "$repotype" == "svn" ] ; then
-     BZREXTRA=""
-     CREATEOPER="checkout"
-     UPDATEOPER="update"
-  fi
+    # Checkout the code
+    # Assuming default is bzr repository
+       BZREXTRA="/trunk"
+       CREATEOPER="branch"
+       UPDATEOPER="pull"
+    if [ "$repotype" == "git" ] ; then
+       BZREXTRA=""
+       CREATEOPER="clone"
+       UPDATEOPER="pull"
+    fi
+    if [ "$repotype" == "svn" ] ; then
+       BZREXTRA=""
+       CREATEOPER="checkout"
+       UPDATEOPER="update"
+    fi
   
-  echo "$VZCTL exec $ctid \"$repotype $CREATEOPER $repotype+ssh://$REPOUSER@$REPOHOST/labs/$labid/$repotype/$reponame$BZREXTRA $BUILDDIR/$labid \" " >> $CONFIG 
+    echo "$VZCTL exec $ctid \"$repotype $CREATEOPER $repotype+ssh://$REPOUSER@$REPOHOST/labs/$labid/$repotype/$reponame$BZREXTRA $BUILDDIR/$labid \" " >> $CONFIG 
+    echo "" >> $CONFIG
+  fi  # End of if loop for modflag
 
-  echo "" >> $CONFIG
-done
-
+done # End of while loop
 
 # Mark remaining running hosts for deletion
-# Strange bug here - vhost_list is not proper
 for vhost in $vhost_list; do
    delctid=$($VZLIST -H -a -o ctid -h $vhost.$DOMAIN | sed 's/^[ \t]*//g')
    CONFIG=$CONFIGPREFIX.`expr $COUNT % $PARALLEL`
