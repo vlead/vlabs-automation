@@ -1,7 +1,7 @@
 labid modflag repotype reponame ostemplate diskspace ram deps1 deps2 deps3 deps4 deps5 deps6 deps7 deps8 deps9 deps10 serv1 serv2 serv3 serv4 serv5 serv6 serv7 serv8 serv9 serv10
-ccnsb01 0 svn Repo_lab_1 ubuntu-12.04-x86_64 % % 
-ccnsb02 0 svn Repo_lab2_mod ubuntu-12.04-x86_64 % %
-ccnsb03 0 svn Repo_lab_3 ubuntu-12.04-x86_64
+ccnsb01 0 svn Repo_lab_1 ubuntu-12.04-x86_64 % % subversion 
+ccnsb02 0 svn Repo_lab2_mod ubuntu-12.04-x86_64 % % subversion
+ccnsb03 0 svn Repo_lab_3 ubuntu-12.04-x86_64 % % subversion
 ccnsb04 0 svn repo ubuntu-12.04-x86_64
 ccnsb05 0 svn Repo_CD_4 ubuntu-12.04-x86_64
 ccnsb06 0 svn apc_new ubuntu-12.04-x86_64
@@ -22,7 +22,7 @@ cse15 0 svn repo_dld ubuntu-12.04-x86_64
 cse16 0 svn Beta ubuntu-12.04-x86_64
 cse17 0 svn final ubuntu-12.04-x86_64
 cse18 0 svn CG_Vlabs ubuntu-12.04-x86_64
-cse19 0 svn CSE19a ubuntu-12.04-x86_64 % % libhighgui-dev libhighgui2.3 libcv-dev libcv2.3 php5-gd % % % % % httpd
+cse19 1 svn CSE19a ubuntu-12.04-x86_64 % % libhighgui-dev libhighgui2.3 libcv-dev libcv2.3 php5-gd subversion % % % % httpd
 cse20 0 svn test ubuntu-12.04-x86_64
 cse21 0 svn Cse21_repo ubuntu-12.04-x86_64 
 cse22 0 svn Beta ubuntu-12.04-x86_64
@@ -41,4 +41,4 @@ eerc02 0 svn CEVL1 ubuntu-12.04-x86_64
 eerc03 0 svn CEVL2 ubuntu-12.04-x86_64
 eerc04 0 svn CEVL3 ubuntu-12.04-x86_64
 eerc05 0 svn MEVL ubuntu-12.04-x86_64
-phy14 0 git physc ubuntu-12.04-x86_64
+phy14 1 git physc ubuntu-12.04-x86_64 % % git

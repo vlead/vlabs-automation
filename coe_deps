@@ -1,11 +1,11 @@
 labid modflag repotype reponame ostemplate diskspace ram deps1 deps2 deps3 deps4 deps5 deps6 deps7 deps8 deps9 deps10 serv1 serv2 serv3 serv4 serv5 serv6 serv7 serv8 serv9 serv10
-cse12 1 bzr FPGA-repo centos-6.3-x86_64 1G 128M bzr apache2 httpd ganglia bzr % % % % % % apache2 httpd ganglia 
-ece19 1 bzr hybrid-elec-repo centos-6.3-x86_64 1G 128M bzr
-eee05 1 bzr SMS-repo centos-6.3-x86_64 % % bzr
-eee09 1 bzr IAL-repo centos-6.3-x86_64 % % bzr
-eee10 1 bzr electrical-machines centos-6.3-x86_64 % % bzr
-eee12 1 bzr PLC centos-6.3-x86_64 % % bzr
-mech04 1 bzr vibration centos-6.3-x86_64 % % bzr
-mech17 1 bzr micromachining centos-6.3-x86_64 % % bzr
-mech18 1 bzr fab centos-6.3-x86_64 % % bzr
-bio16 1 bzr BSPL-repo centos-6.3-x86_64 % % bzr
+cse12 1 bzr FPGA-repo centos-6-x86_64 1G 128M bzr httpd ganglia bzr % % % % % % httpd ganglia 
+ece19 0 bzr hybrid-elec-repo centos-6-x86_64 1G 128M bzr
+eee05 0 bzr SMS-repo centos-6-x86_64 % % bzr
+eee09 0 bzr IAL-repo centos-6-x86_64 % % bzr
+eee10 0 bzr electrical-machines centos-6-x86_64 % % bzr
+eee12 0 bzr PLC centos-6-x86_64 % % bzr
+mech04 0 bzr vibration centos-6-x86_64 % % bzr
+mech17 0 bzr micromachining centos-6-x86_64 % % bzr
+mech18 0 bzr fab centos-6-x86_64 % % bzr
+bio16 0 bzr BSPL-repo centos-6-x86_64 % % bzr

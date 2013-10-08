@@ -2,7 +2,7 @@
 
 ##################GLOBALS#################
 STARTCTID=100
-ENDCTID=310
+ENDCTID=110
 DOMAIN="local"
 TESTSUBDOMAIN="test"
 ENV="test"   # Leave it blank for production
@@ -11,11 +11,14 @@ PARALLEL="1"
 IPPREFIX="10.4.13."
 REPOUSER="svnadmin"
 REPOHOST="svn.virtual-labs.ac.in"
-BUILDDIR="~"
+BUILDUSER="root"
+BUILDDIR="~$BUILDUSER"
+SLEEPSECS="30"
+SETPROXY="export http_proxy='http://proxy.iiit.ac.in:8080';"
 ##########################################
 
 ###############DEFAULTS###################
-OSTEMPLATE=centos-6.3-x86_64 # Default Template
+OSTEMPLATE=centos-6-x86_64 # Default Template
 NAMESERVER=10.4.12.157
 DISKSPACE=1G
 RAM=128M
@@ -47,17 +50,16 @@ do
    echo $ctid >/dev/null
  else
    while [ "$ctid" != "$vid" ] ; do
-    vid_list_available="$vid_list_available $ctid"
+    vid_list_available="$vid_list_available$ctid "
     ctid=`expr $ctid + 1`
    done
  fi
 ctid=`expr $ctid + 1`
 done
-vid_list_available="$vid_list_available "
 
-if [ "$ctid" != "$ENDCTID" ] ; then 
+if [ "$ctid" -le "$ENDCTID" ] ; then 
  while [ "$ctid" != "$ENDCTID" ] ; do
-  vid_list_available="$vid_list_available $ctid"
+  vid_list_available="$vid_list_available$ctid "
   ctid=`expr $ctid + 1`
  done
 fi
@@ -153,9 +155,14 @@ for line in $(cat *_deps | sort -u);
     echo "########$labid############" >> $CONFIG
     # Strip the ctid we used 
     vid_list_available=$(echo $vid_list_available | cut -d' ' -f2-400)
+    
+    # Create commands for VM creation
     echo "$VZCTL create $ctid --ostemplate $ostemplate --hostname $labid.$DOMAIN --ipadd $IPPREFIX$ctid --diskspace $diskspace" >> $CONFIG
     echo "$VZCTL start $ctid" >> $CONFIG
     echo "$VZCTL set $ctid --nameserver $NAMESERVER --ram $ram --save" >> $CONFIG
+    # Disable strict host checking and add keys for $REPOHOST
+    echo "$VZCTL exec $ctid \"mkdir -p ~$BUILDUSER/.ssh\" " >> $CONFIG
+    echo "$VZCTL exec $ctid \"echo Host $REPOHOST $'\n'$'\t' StrictHostKeyChecking no > ~$BUILDUSER/.ssh/config \" " >> $CONFIG 
     COUNT=`expr $COUNT + 1`
   fi
 
@@ -185,13 +192,18 @@ for line in $(cat *_deps | sort -u);
         ;;
     esac
 
-    # Set proxy for access to internet
-    echo $VZCTL exec $ctid \"export http_proxy="http://proxy.iiit.ac.in:8080\" " >> $CONFIG
+    # First sleep for 15 secs for previous changes to get affect
+    echo "sleep $SLEEPSECS" >> $CONFIG
     # Install Dependencies
-    for dep in $deps ; 
-    do
-      echo "$VZCTL exec $ctid \"$PKGMGR $PKGINSTALL $dep -y\" " >> $CONFIG
-    done 
+    oldifs=$IFS
+    IFS=' '
+    if [ "$deps" != "" ] ; then
+     echo "$VZCTL exec $ctid \"$SETPROXY $PKGMGR update -y\" " >> $CONFIG
+     for dep in $deps ; 
+     do
+       echo "$VZCTL exec $ctid \"$SETPROXY $PKGMGR $PKGINSTALL $dep -y\" " >> $CONFIG
+     done
+    fi 
  
     # Install and enable services 
     for serv in $servs ; 
@@ -199,12 +211,14 @@ for line in $(cat *_deps | sort -u);
       echo "$VZCTL exec $ctid \"$SRVMGR $SRVADD $serv\" " >> $CONFIG
       echo "$VZCTL exec $ctid \"$SRVMGR $serv $SRVENABLE\" " >> $CONFIG
     done
+    IFS=$oldifs
 
     # Checkout the code
     # Assuming default is bzr repository
        BZREXTRA="/trunk"
        CREATEOPER="branch"
        UPDATEOPER="pull"
+       BZRPASS=$REPOPASS
     if [ "$repotype" == "git" ] ; then
        BZREXTRA=""
        CREATEOPER="clone"
@@ -214,9 +228,10 @@ for line in $(cat *_deps | sort -u);
        BZREXTRA=""
        CREATEOPER="checkout"
        UPDATEOPER="update"
+       SVNPASS="--password $REPOPASS"
     fi
   
-    echo "$VZCTL exec $ctid \"$repotype $CREATEOPER $repotype+ssh://$REPOUSER@$REPOHOST/labs/$labid/$repotype/$reponame$BZREXTRA $BUILDDIR/$labid \" " >> $CONFIG 
+    echo "$VZCTL exec $ctid \"$repotype $CREATEOPER $repotype+ssh://$REPOUSER:$BZRPASS@$REPOHOST/labs/$labid/$repotype/$reponame$BZREXTRA $BUILDDIR/$labid $SVNPASS\" " >> $CONFIG 
     echo "" >> $CONFIG
   fi  # End of if loop for modflag
 
