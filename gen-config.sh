@@ -10,6 +10,7 @@ CONFIGPREFIX="vlabs.config"
 PARALLEL="1"
 IPPREFIX="10.4.13."
 REPOUSER="svnadmin"
+REPOPASS="adminsvn"
 REPOHOST="svn.virtual-labs.ac.in"
 BUILDUSER="root"
 BUILDDIR="~$BUILDUSER"
@@ -218,20 +219,24 @@ for line in $(cat *_deps | sort -u);
        BZREXTRA="/trunk"
        CREATEOPER="branch"
        UPDATEOPER="pull"
-       BZRPASS=$REPOPASS
+       BZRPASS=":$REPOPASS"
+       SVNPASS=""
     if [ "$repotype" == "git" ] ; then
        BZREXTRA=""
        CREATEOPER="clone"
        UPDATEOPER="pull"
+       BZRPASS=""
+       SVNPASS=""
     fi
     if [ "$repotype" == "svn" ] ; then
        BZREXTRA=""
        CREATEOPER="checkout"
        UPDATEOPER="update"
+       BZRPASS=""
        SVNPASS="--password $REPOPASS"
     fi
   
-    echo "$VZCTL exec $ctid \"$repotype $CREATEOPER $repotype+ssh://$REPOUSER:$BZRPASS@$REPOHOST/labs/$labid/$repotype/$reponame$BZREXTRA $BUILDDIR/$labid $SVNPASS\" " >> $CONFIG 
+    echo "$VZCTL exec $ctid \"$repotype $CREATEOPER $repotype+ssh://$REPOUSER$BZRPASS@$REPOHOST/labs/$labid/$repotype/$reponame$BZREXTRA $BUILDDIR/$labid $SVNPASS\" " >> $CONFIG 
     echo "" >> $CONFIG
   fi  # End of if loop for modflag
 
