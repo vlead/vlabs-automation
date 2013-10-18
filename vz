@@ -1,24 +1,29 @@
 
-
 case $1 in
  stop)
-  OPER="stop"
+  OPER1="stop"
   ;;
  start)
-  OPER="start"
+  OPER1="start"
   ;; 
  restart)
-  OPER="restart"
+  OPER1="restart"
   ;;
  destroy)
-  OPER="destroy"
+  OPER1="destroy"
   ;;
+ clean)
+  OPER1="stop"
+  OPER2="destroy"
 esac 
 
 sctid=`echo $2 | cut -d'-' -f1`
 ectid=`echo $2 | cut -d'-' -f2`
 while [ "$sctid" \< "$ectid" ] ; do
  echo $sctid
- vzctl $OPER $sctid
+ vzctl $OPER1 $sctid
+ if [ "$OPER2" != "" ] ; then
+    vzctl $OPER2 $sctid
+ fi
  sctid=`expr $sctid + 1`
 done
