@@ -33,8 +33,7 @@ do
 
    # SVN repository
    if [ $repotype == "svn" ]; then
-   echo "haha"
-#   svn co svn+ssh://$USER@$REPOHOST/labs/$labid/svn/$reponame $BUILDDIR/$labid --password $PASSWD
+   svn co svn+ssh://$USER@$REPOHOST/labs/$labid/svn/$reponame $BUILDDIR/$labid --password $PASSWD
    fi
 ##########BUILD####################
 #  cd $labid/src
