@@ -5,7 +5,7 @@ DOMAIN="local"
 TESTSUBDOMAIN="test"
 ENV="test"   # Leave it blank for production
 CONFIGPREFIX="vlabs.config"
-PARALLEL="1"
+PARALLEL="4"
 ##########################################
 
 # Spawn parallel processes
