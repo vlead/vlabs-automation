@@ -2,10 +2,10 @@
 
 ##################GLOBALS#################
 STARTCTID=100
-ENDCTID=110
+ENDCTID=199
 DOMAIN="local"
 TESTSUBDOMAIN="test"
-ENV="test"   # Leave it blank for production
+ENV="-test"   # Leave it blank for production
 CONFIGPREFIX="vlabs.config"
 PARALLEL="1"
 IPPREFIX="10.4.13."
@@ -14,6 +14,7 @@ REPOPASS="adminsvn"
 REPOHOST="svn.virtual-labs.ac.in"
 BUILDUSER="root"
 BUILDDIR="~$BUILDUSER"
+RSAKEY="id_svnadmin_rsa"
 SLEEPSECS="30"
 SETPROXY="export http_proxy='http://proxy.iiit.ac.in:8080';"
 ##########################################
@@ -31,6 +32,8 @@ DEFAULT="%"  # Indicator for taking default values
 ##########################################
 
 ###############OPENVZ COMMANDS############
+VZ="/vz"
+VZPRIVATE="$VZ/private"
 VZCTL="vzctl"
 VZDUMP="vzdump"
 VZLIST="vzlist"
@@ -40,6 +43,7 @@ VZLIST="vzlist"
 VIRSH="virsh"
 ##########################################
 
+echo $RSAKEYCONTENT
 vid_list=$(vzlist -H -a -o ctid -s ctid| sed 's/^[ \t]*//g')
 vid_list_available=
 
@@ -114,10 +118,8 @@ for line in $(cat *_deps | sort -u);
     ram=$RAM
   fi
 
-  # If Environment is test append test to the hostname 
-  if [ "$ENV" != "" ]; then
-    labid="$labid-$ENV"
-  fi
+  # Construct the labhost by appending ENV to labid 
+   labhost="$labid$ENV"
 
   # Compare hosts and see what needs to be done
   vhost=$(echo $vhost_list | cut -d' ' -f1)
@@ -125,7 +127,7 @@ for line in $(cat *_deps | sort -u);
   # Choose config-file
   CONFIG=$CONFIGPREFIX.`expr $COUNT % $PARALLEL`
 
-  while [ "$labid" \> "$vhost" ] && [ "$vhost" != "" ] ;
+  while [ "$labhost" \> "$vhost" ] && [ "$vhost" != "" ] ;
    do
         # Extra container running mark for deletion
         delctid=$($VZLIST -H -a -o ctid -h $vhost.$DOMAIN | sed 's/^[ \t]*//g')
@@ -138,10 +140,10 @@ for line in $(cat *_deps | sort -u);
         COUNT=`expr $COUNT + 1`
    done
 
-  if [ "$labid" == "$vhost" ]; then
+  if [ "$labhost" == "$vhost" ]; then
      # Container and config both exist , just update config if modflag is set
    if [ "$modflag" == "1" ]; then 
-     echo "########$labid############" >> $CONFIG
+     echo "########$labhost############" >> $CONFIG
      ctid=$($VZLIST -H -a -o ctid -h $vhost.$DOMAIN | sed 's/^[ \t]*//g')
      echo "$VZCTL set $ctid --diskspace $diskspace --ram $ram --nameserver $NAMESERVER --save" >> $CONFIG
      COUNT=`expr $COUNT + 1`
@@ -153,17 +155,20 @@ for line in $(cat *_deps | sort -u);
     ctid=$(echo $vid_list_available | cut -d' ' -f1)  
     # Force modflag=1
     modflag=1
-    echo "########$labid############" >> $CONFIG
+    echo "########$labhost############" >> $CONFIG
     # Strip the ctid we used 
     vid_list_available=$(echo $vid_list_available | cut -d' ' -f2-400)
     
     # Create commands for VM creation
-    echo "$VZCTL create $ctid --ostemplate $ostemplate --hostname $labid.$DOMAIN --ipadd $IPPREFIX$ctid --diskspace $diskspace" >> $CONFIG
+    echo "$VZCTL create $ctid --ostemplate $ostemplate --hostname $labhost.$DOMAIN --ipadd $IPPREFIX$ctid --diskspace $diskspace" >> $CONFIG
     echo "$VZCTL start $ctid" >> $CONFIG
     echo "$VZCTL set $ctid --nameserver $NAMESERVER --ram $ram --save" >> $CONFIG
     # Disable strict host checking and add keys for $REPOHOST
     echo "$VZCTL exec $ctid \"mkdir -p ~$BUILDUSER/.ssh\" " >> $CONFIG
-    echo "$VZCTL exec $ctid \"echo Host $REPOHOST $'\n'$'\t' StrictHostKeyChecking no > ~$BUILDUSER/.ssh/config \" " >> $CONFIG 
+    echo "$VZCTL exec $ctid \"echo Host $REPOHOST $'\n'$'\t' StrictHostKeyChecking no $'\n'$'\t' IdentityFile ~$BUILDUSER/.ssh/$RSAKEY > ~$BUILDUSER/.ssh/config \" " >> $CONFIG 
+    # Add the RSA Private key for logging on to SVN server
+    echo "cat $RSAKEY | $VZCTL exec $ctid \"cat - > ~$BUILDUSER/.ssh/$RSAKEY \" " >> $CONFIG
+    echo "$VZCTL exec $ctid \"chmod 600 ~$BUILDUSER/.ssh/$RSAKEY \" " >> $CONFIG
     COUNT=`expr $COUNT + 1`
   fi
 
@@ -219,24 +224,18 @@ for line in $(cat *_deps | sort -u);
        BZREXTRA="/trunk"
        CREATEOPER="branch"
        UPDATEOPER="pull"
-       BZRPASS=":$REPOPASS"
-       SVNPASS=""
     if [ "$repotype" == "git" ] ; then
        BZREXTRA=""
        CREATEOPER="clone"
        UPDATEOPER="pull"
-       BZRPASS=""
-       SVNPASS=""
     fi
     if [ "$repotype" == "svn" ] ; then
        BZREXTRA=""
        CREATEOPER="checkout"
        UPDATEOPER="update"
-       BZRPASS=""
-       SVNPASS="--password $REPOPASS"
     fi
   
-    echo "$VZCTL exec $ctid \"$repotype $CREATEOPER $repotype+ssh://$REPOUSER$BZRPASS@$REPOHOST/labs/$labid/$repotype/$reponame$BZREXTRA $BUILDDIR/$labid $SVNPASS\" " >> $CONFIG 
+    echo "$VZCTL exec $ctid \"$repotype $CREATEOPER $repotype+ssh://$REPOUSER@$REPOHOST/labs/$labid/$repotype/$reponame$BZREXTRA $BUILDDIR/$labid\" " >> $CONFIG 
     echo "" >> $CONFIG
   fi  # End of if loop for modflag
 
