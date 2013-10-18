@@ -7,7 +7,7 @@ DOMAIN="local"
 TESTSUBDOMAIN="test"
 ENV="-test"   # Leave it blank for production
 CONFIGPREFIX="vlabs.config"
-PARALLEL="1"
+PARALLEL="4"
 IPPREFIX="10.4.13."
 REPOUSER="svnadmin"
 REPOPASS="adminsvn"
@@ -15,15 +15,15 @@ REPOHOST="svn.virtual-labs.ac.in"
 BUILDUSER="root"
 BUILDDIR="~$BUILDUSER"
 RSAKEY="id_svnadmin_rsa"
-SLEEPSECS="30"
+SLEEPSECS="10"
 SETPROXY="export http_proxy='http://proxy.iiit.ac.in:8080';"
 ##########################################
 
 ###############DEFAULTS###################
 OSTEMPLATE=centos-6-x86_64 # Default Template
 NAMESERVER=10.4.12.157
-DISKSPACE=1G
-RAM=128M
+DISKSPACE=3G
+RAM=256M
 HOSTNAME=labxxx
 IPADD=10.10.10.10
 PKGMGR="yum"   # Default Package Manager
@@ -35,6 +35,7 @@ DEFAULT="%"  # Indicator for taking default values
 VZ="/vz"
 VZPRIVATE="$VZ/private"
 VZCTL="vzctl"
+VZEXECCMD="exec"
 VZDUMP="vzdump"
 VZLIST="vzlist"
 ##########################################
@@ -132,6 +133,7 @@ for line in $(cat *_deps | sort -u);
         # Extra container running mark for deletion
         delctid=$($VZLIST -H -a -o ctid -h $vhost.$DOMAIN | sed 's/^[ \t]*//g')
         echo "########$vhost############" >> $CONFIG
+	echo "echo \"########$vhost############\"" >> $CONFIG
         echo "$VZCTL stop $delctid" >> $CONFIG
 #       echo "$VZCTL destroy $delctid" >> $CONFIG
         echo "" >> $CONFIG
@@ -144,6 +146,7 @@ for line in $(cat *_deps | sort -u);
      # Container and config both exist , just update config if modflag is set
    if [ "$modflag" == "1" ]; then 
      echo "########$labhost############" >> $CONFIG
+     echo "echo \"########$labhost############\"" >> $CONFIG
      ctid=$($VZLIST -H -a -o ctid -h $vhost.$DOMAIN | sed 's/^[ \t]*//g')
      echo "$VZCTL set $ctid --diskspace $diskspace --ram $ram --nameserver $NAMESERVER --save" >> $CONFIG
      COUNT=`expr $COUNT + 1`
@@ -156,6 +159,7 @@ for line in $(cat *_deps | sort -u);
     # Force modflag=1
     modflag=1
     echo "########$labhost############" >> $CONFIG
+    echo "echo \"########$labhost############\"" >> $CONFIG
     # Strip the ctid we used 
     vid_list_available=$(echo $vid_list_available | cut -d' ' -f2-400)
     
@@ -164,11 +168,11 @@ for line in $(cat *_deps | sort -u);
     echo "$VZCTL start $ctid" >> $CONFIG
     echo "$VZCTL set $ctid --nameserver $NAMESERVER --ram $ram --save" >> $CONFIG
     # Disable strict host checking and add keys for $REPOHOST
-    echo "$VZCTL exec $ctid \"mkdir -p ~$BUILDUSER/.ssh\" " >> $CONFIG
-    echo "$VZCTL exec $ctid \"echo Host $REPOHOST $'\n'$'\t' StrictHostKeyChecking no $'\n'$'\t' IdentityFile ~$BUILDUSER/.ssh/$RSAKEY > ~$BUILDUSER/.ssh/config \" " >> $CONFIG 
+    echo "$VZCTL $VZEXECCMD $ctid \"mkdir -p ~$BUILDUSER/.ssh\" " >> $CONFIG
+    echo "$VZCTL $VZEXECCMD $ctid \"echo Host $REPOHOST $'\n'$'\t' StrictHostKeyChecking no $'\n'$'\t' IdentityFile ~$BUILDUSER/.ssh/$RSAKEY > ~$BUILDUSER/.ssh/config \" " >> $CONFIG 
     # Add the RSA Private key for logging on to SVN server
-    echo "cat $RSAKEY | $VZCTL exec $ctid \"cat - > ~$BUILDUSER/.ssh/$RSAKEY \" " >> $CONFIG
-    echo "$VZCTL exec $ctid \"chmod 600 ~$BUILDUSER/.ssh/$RSAKEY \" " >> $CONFIG
+    echo "cat $RSAKEY | $VZCTL $VZEXECCMD $ctid \"cat - > ~$BUILDUSER/.ssh/$RSAKEY \" " >> $CONFIG
+    echo "$VZCTL $VZEXECCMD $ctid \"chmod 600 ~$BUILDUSER/.ssh/$RSAKEY \" " >> $CONFIG
     COUNT=`expr $COUNT + 1`
   fi
 
@@ -204,38 +208,42 @@ for line in $(cat *_deps | sort -u);
     oldifs=$IFS
     IFS=' '
     if [ "$deps" != "" ] ; then
-     echo "$VZCTL exec $ctid \"$SETPROXY $PKGMGR update -y\" " >> $CONFIG
+     echo "$VZCTL $VZEXECCMD $ctid \"$SETPROXY $PKGMGR update -y\" " >> $CONFIG
      for dep in $deps ; 
      do
-       echo "$VZCTL exec $ctid \"$SETPROXY $PKGMGR $PKGINSTALL $dep -y\" " >> $CONFIG
+       echo "$VZCTL $VZEXECCMD  $ctid \"$SETPROXY $PKGMGR $PKGINSTALL $dep -y\" " >> $CONFIG
      done
     fi 
  
     # Install and enable services 
     for serv in $servs ; 
     do
-      echo "$VZCTL exec $ctid \"$SRVMGR $SRVADD $serv\" " >> $CONFIG
-      echo "$VZCTL exec $ctid \"$SRVMGR $serv $SRVENABLE\" " >> $CONFIG
+      echo "$VZCTL $VZEXECCMD $ctid \"$SRVMGR $SRVADD $serv\" " >> $CONFIG
+      echo "$VZCTL $VZEXECCMD $ctid \"$SRVMGR $serv $SRVENABLE\" " >> $CONFIG
     done
     IFS=$oldifs
 
     # Checkout the code
     # Assuming default is bzr repository
        BZREXTRA="/trunk"
-       CREATEOPER="branch"
-       UPDATEOPER="pull"
+       OPER="branch"
     if [ "$repotype" == "git" ] ; then
        BZREXTRA=""
-       CREATEOPER="clone"
-       UPDATEOPER="pull"
+       OPER="clone"
     fi
     if [ "$repotype" == "svn" ] ; then
        BZREXTRA=""
-       CREATEOPER="checkout"
-       UPDATEOPER="update"
+       OPER="checkout"
     fi
-  
-    echo "$VZCTL exec $ctid \"$repotype $CREATEOPER $repotype+ssh://$REPOUSER@$REPOHOST/labs/$labid/$repotype/$reponame$BZREXTRA $BUILDDIR/$labid\" " >> $CONFIG 
+
+    # Delete and check-out the repository
+    echo "$VZCTL $VZEXECCMD $ctid \"rm -rf $BUILDDIR/$labid\" " >> $CONFIG 
+    echo "$VZCTL $VZEXECCMD $ctid \"$repotype $OPER $repotype+ssh://$REPOUSER@$REPOHOST/labs/$labid/$repotype/$reponame$BZREXTRA $BUILDDIR/$labid\" " >> $CONFIG 
+
+    # Run the make-file to build, deploy and run basic test
+    echo "$VZCTL $VZEXECCMD $ctid \"cd $BUILDDIR/$labid; make install\" " >> $CONFIG
+    
+    # Blank line indicating end of the lab
     echo "" >> $CONFIG
   fi  # End of if loop for modflag
 
@@ -246,6 +254,7 @@ for vhost in $vhost_list; do
    delctid=$($VZLIST -H -a -o ctid -h $vhost.$DOMAIN | sed 's/^[ \t]*//g')
    CONFIG=$CONFIGPREFIX.`expr $COUNT % $PARALLEL`
    echo "########$vhost############" >> $CONFIG
+   echo "echo \"########$vhost############\"" >> $CONFIG
    echo "$VZCTL stop $delctid" >> $CONFIG
 #   echo "$VZCTL destroy $delctid" >> $CONFIG
    echo "" >> $CONFIG
