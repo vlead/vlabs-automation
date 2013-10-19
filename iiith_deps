@@ -9,11 +9,11 @@ ccnsb07 0 svn ccnsb07 ubuntu-12.04-x86_64 % % subversion apache2
 cse01 0 svn DS_NEW ubuntu-12.04-x86_64 % % subversion apache2
 cse02 0 svn programming ubuntu-12.04-x86_64 % % subversion apache2
 cse04 0 svn problem_solving ubuntu-12.04-x86_64 % % subversion apache2
-cse05 0 svn popl-vlab ubuntu-12.04-x86_64 % % subversion apache2
+cse05 1 svn popl-vlab ubuntu-12.04-x86_64 % % subversion apache2 emacs
 cse06 0 svn new_release ubuntu-12.04-x86_64 % % subversion apache2
 cse07 0 svn FirstMining ubuntu-12.04-x86_64 % % subversion apache2
 cse08 0 svn se ubuntu-12.04-x86_64 % % subversion apache2 
-cse09 0 svn cse09 ubuntu-12.04-x86_64 % % subversion apache2
+cse09 1 svn cse09 ubuntu-12.04-x86_64 % % subversion apache2 graphviz
 cse10 0 svn cse10 ubuntu-12.04-x86_64 % % subversion apache2
 cse11 0 svn ComputerSystemOrganization ubuntu-12.04-x86_64 % % subversion apache2
 cse13 0 svn Advanced_VLSI ubuntu-12.04-x86_64 % % subversion apache2
@@ -22,16 +22,16 @@ cse15 0 svn repo_dld ubuntu-12.04-x86_64 % % subversion apache2
 cse16 0 svn Beta ubuntu-12.04-x86_64 % % subversion apache2
 cse17 0 svn final ubuntu-12.04-x86_64 % % subversion apache2
 cse18 0 svn CG_Vlabs ubuntu-12.04-x86_64 % % subversion apache2
-cse19 1 svn CSE19a ubuntu-12.04-x86_64 % % apache2 libhighgui-dev libhighgui2.3 libcv-dev libcv2.3 php5-gd subversion % % % apache2
+cse19 1 svn CSE19a ubuntu-12.04-x86_64 % % apache2 libhighgui-dev libhighgui2.3 libcv-dev libcv2.3 php5-gd subversion libopencv-contrib2.3 % % apache2
 cse20 0 svn test ubuntu-12.04-x86_64 % % subversion apache2
 cse21 0 svn Cse21_repo ubuntu-12.04-x86_64 % % subversion apache2 
 cse22 0 svn Beta ubuntu-12.04-x86_64 % % subversion apache2
 cse23 0 svn CL-vlab1 ubuntu-12.04-x86_64 % % subversion apache2
 cse24 0 svn NLP-vlab2 ubuntu-12.04-x86_64 % % subversion apache2
-cse29 0 svn newui ubuntu-12.04-x86_64 % % subversion apache2
+cse29 1 bzr newui ubuntu-12.04-x86_64 % % bzr apache2
 cse30 0 svn test1 ubuntu-12.04-x86_64 % % subversion apache2 
 ece04 0 svn FPGA-lab ubuntu-12.04-x86_64 % % subversion apache2
-ece05 0 svn vlsi_vlab ubuntu-12.04-x86_64 % % subversion apache2
+ece05 1 bzr vlsi_vlab ubuntu-12.04-x86_64 % % bzr apache2
 ece06 0 svn dspVlab ubuntu-12.04-x86_64 % % subversion apache2
 ece09 0 svn Wireless ubuntu-12.04-x86_64 % % subversion apache2
 mech08 0 svn vlkb_svn ubuntu-12.04-x86_64 % % subversion apache2
@@ -41,4 +41,4 @@ eerc02 0 svn CEVL1 ubuntu-12.04-x86_64 % % subversion apache2
 eerc03 0 svn CEVL2 ubuntu-12.04-x86_64 % % subversion apache2
 eerc04 0 svn CEVL3 ubuntu-12.04-x86_64 % % subversion apache2
 eerc05 0 svn MEVL ubuntu-12.04-x86_64 % % subversion apache2
-phy14 1 git physc ubuntu-12.04-x86_64 % % git apache2
+phy14 0 git physc ubuntu-12.04-x86_64 % % git apache2

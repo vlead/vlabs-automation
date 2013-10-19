@@ -13,7 +13,7 @@ DOMAIN="local"
 TESTSUBDOMAIN="test"
 ENV="test"   # Leave it blank for production
 CONFIGPREFIX="vlabs.config"
-PARALLEL="4"
+PARALLEL="2"
 ##########################################
 
 # Error message if the script is not run with root privileges"

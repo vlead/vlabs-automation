@@ -7,7 +7,7 @@ DOMAIN="local"
 TESTSUBDOMAIN="test"
 ENV="-test"   # Leave it blank for production
 CONFIGPREFIX="vlabs.config"
-PARALLEL="4"
+PARALLEL="2"
 IPPREFIX="10.4.13."
 REPOUSER="svnadmin"
 REPOPASS="adminsvn"
@@ -44,7 +44,6 @@ VZLIST="vzlist"
 VIRSH="virsh"
 ##########################################
 
-echo $RSAKEYCONTENT
 vid_list=$(vzlist -H -a -o ctid -s ctid| sed 's/^[ \t]*//g')
 vid_list_available=
 
@@ -241,7 +240,7 @@ for line in $(cat *_deps | sort -u);
     echo "$VZCTL $VZEXECCMD $ctid \"$repotype $OPER $repotype+ssh://$REPOUSER@$REPOHOST/labs/$labid/$repotype/$reponame$BZREXTRA $BUILDDIR/$labid\" " >> $CONFIG 
 
     # Run the make-file to build, deploy and run basic test
-    echo "$VZCTL $VZEXECCMD $ctid \"cd $BUILDDIR/$labid; make install\" " >> $CONFIG
+    echo "$VZCTL $VZEXECCMD $ctid \"cd $BUILDDIR/$labid/src; make\" " >> $CONFIG
     
     # Blank line indicating end of the lab
     echo "" >> $CONFIG
