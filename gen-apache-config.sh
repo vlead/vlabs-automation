@@ -49,3 +49,6 @@ vecho "    <Location />"
 vecho "        ProxyPass http://localhost/"
 vecho "    </Location>"
 vecho "</virtualHost>"
+
+# Restart Apache
+service httpd restart
