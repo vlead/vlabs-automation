@@ -1,10 +1,10 @@
 labid modflag repotype reponame ostemplate diskspace ram deps1 deps2 deps3 deps4 deps5 deps6 deps7 deps8 deps9 deps10 serv1 serv2 serv3 serv4 serv5 serv6 serv7 serv8 serv9 serv10
 ece09 0 bzr ece09 % % % bzr httpd
-ece08 1 bzr ece08 % % 512M bzr httpd
+ece08 0 bzr ece08 % % 512M bzr httpd
 ece28 0 bzr ece28 % % % bzr httpd
 eee07 0 bzr eee07 % % % bzr httpd
 civil16 0 bzr civil16 % % % bzr httpd
 bio15 0 bzr bio15 % % 800M bzr httpd
-txtl01 1 bzr txtl01 % % 512M bzr httpd
-txtl02 1 bzr txtl02 % % 512M bzr httpd
-txtl03 1 bzr txtl03 % % 512M bzr httpd
+txtl01 0 bzr txtl01 % % 800M bzr httpd
+txtl02 0 bzr txtl02 % % 800M bzr httpd
+txtl03 0 bzr txtl03 % % 512M bzr httpd

@@ -9,7 +9,7 @@ ccnsb07 0 svn ccnsb07 ubuntu-12.04-x86_64 % % subversion apache2
 cse01 0 svn DS_NEW ubuntu-12.04-x86_64 % % subversion apache2
 cse02 0 svn programming ubuntu-12.04-x86_64 % % subversion apache2
 cse04 0 svn problem_solving ubuntu-12.04-x86_64 % % subversion apache2
-cse05 1 svn popl-vlab ubuntu-12.04-x86_64 % % subversion apache2 emacs
+cse05 0 svn popl-vlab ubuntu-12.04-x86_64 % % subversion apache2 emacs
 cse06 0 svn new_release ubuntu-12.04-x86_64 % % subversion apache2
 cse07 0 svn FirstMining ubuntu-12.04-x86_64 % % subversion apache2
 cse08 0 svn se ubuntu-12.04-x86_64 % % subversion apache2 
@@ -28,10 +28,10 @@ cse21 0 svn Cse21_repo ubuntu-12.04-x86_64 % % subversion apache2
 cse22 0 svn Beta ubuntu-12.04-x86_64 % % subversion apache2
 cse23 0 svn CL-vlab1 ubuntu-12.04-x86_64 % % subversion apache2
 cse24 0 svn NLP-vlab2 ubuntu-12.04-x86_64 % % subversion apache2
-cse29 1 bzr newui ubuntu-12.04-x86_64 % % bzr apache2
+cse29 0 bzr newui ubuntu-12.04-x86_64 % % bzr apache2
 cse30 0 svn test1 ubuntu-12.04-x86_64 % % subversion apache2 
 ece04 0 svn FPGA-lab ubuntu-12.04-x86_64 % % subversion apache2
-ece05 1 bzr vlsi_vlab ubuntu-12.04-x86_64 % % bzr apache2
+ece05 0 bzr vlsi_vlab ubuntu-12.04-x86_64 % % bzr apache2
 ece06 0 svn dspVlab ubuntu-12.04-x86_64 % % subversion apache2
 ece09 0 svn Wireless ubuntu-12.04-x86_64 % % subversion apache2
 mech08 0 svn vlkb_svn ubuntu-12.04-x86_64 % % subversion apache2

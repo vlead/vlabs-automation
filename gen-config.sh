@@ -241,6 +241,7 @@ for line in $(cat *_deps | sort -u);
 
     # Run the make-file to build, deploy and run basic test
     echo "$VZCTL $VZEXECCMD $ctid \"cd $BUILDDIR/$labid/src; make\" " >> $CONFIG
+    echo "$VZCTL $VZEXECCMD $ctid \"rsync -avz $BUILDDIR/$labid/build/ /var/www/ \" " >> $CONFIG
     
     # Blank line indicating end of the lab
     echo "" >> $CONFIG
