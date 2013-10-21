@@ -1,0 +1,21 @@
+labid modflag labdisc repotype reponame ostemplate diskspace ram deps1 deps2 deps3 deps4 deps5 deps6 deps7 deps8 deps9 deps10 serv1 serv2 serv3 serv4 serv5 serv6 serv7 serv8 serv9 serv10
+ece03 0 Electronics bzr ece03
+ece18 0 Electronics bzr ece18
+ece30 0 Electronics
+civil08 0 Civil
+mech01 0 Mechanical bzr mech01
+mech06 0 Mechanical
+mech08 0 Mechanical svn vlkb_svn
+mech10 0 Mechanical bzr mech10
+mech14 0 Mechanical
+mech15 0 Mechanical
+mech16 0 Mechanical
+mech20 0 Mechanical
+mech29 0 Mechanical
+mech30 0 Mechanical
+phy01 0 Physical-Sciences bzr phy01
+phy15 0 Physical-Sciences
+phy16 0 Physical-Sciences
+chs13 0 Chemical-Science bzr chs13
+aero01 0 Aerospace
+aero02 0 Aerospace

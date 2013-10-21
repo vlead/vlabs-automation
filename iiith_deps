@@ -1,11 +1,11 @@
 labid modflag labdisc repotype reponame ostemplate diskspace ram deps1 deps2 deps3 deps4 deps5 deps6 deps7 deps8 deps9 deps10 serv1 serv2 serv3 serv4 serv5 serv6 serv7 serv8 serv9 serv10
-ccnsb01 0 Chemical-Sciences svn Repo_lab_1 ubuntu-12.04-x86_64 % % apache2 
-ccnsb02 0 Chemical-Sciences svn Repo_lab2_mod ubuntu-12.04-x86_64 % % apache2
-ccnsb03 0 Chemical-Sciences svn Repo_lab_3 ubuntu-12.04-x86_64 % % apache2
-ccnsb04 0 Chemical-Sciences svn repo ubuntu-12.04-x86_64 % % apache2
-ccnsb05 0 Chemical-Sciences svn Repo_CD_4 ubuntu-12.04-x86_64 % % apache2
-ccnsb06 0 Chemical-Sciences svn apc_new ubuntu-12.04-x86_64 % % apache2
-ccnsb07 0 Chemical-Sciences svn ccnsb07 ubuntu-12.04-x86_64 % % apache2
+ccnsb01 0 Chemical-Science svn Repo_lab_1 ubuntu-12.04-x86_64 % % apache2 
+ccnsb02 0 Chemical-Science svn Repo_lab2_mod ubuntu-12.04-x86_64 % % apache2
+ccnsb03 0 Chemical-Science svn Repo_lab_3 ubuntu-12.04-x86_64 % % apache2
+ccnsb04 0 Chemical-Science svn repo ubuntu-12.04-x86_64 % % apache2
+ccnsb05 0 Chemical-Science svn Repo_CD_4 ubuntu-12.04-x86_64 % % apache2
+ccnsb06 0 Chemical-Science svn apc_new ubuntu-12.04-x86_64 % % apache2
+ccnsb07 0 Chemical-Science svn ccnsb07 ubuntu-12.04-x86_64 % % apache2
 cse01 0 Computer-Science svn DS_NEW ubuntu-12.04-x86_64 % % apache2
 cse02 0 Computer-Science svn programming ubuntu-12.04-x86_64 % % apache2
 cse04 0 Computer-Science svn problem_solving ubuntu-12.04-x86_64 % % apache2
@@ -30,11 +30,8 @@ cse23 0 Computer-Science svn CL-vlab1 ubuntu-12.04-x86_64 % % apache2
 cse24 0 Computer-Science svn NLP-vlab2 ubuntu-12.04-x86_64 % % apache2
 cse29 0 Computer-Science bzr newui ubuntu-12.04-x86_64 % % bzr apache2
 cse30 0 Computer-Science svn test1 ubuntu-12.04-x86_64 % % apache2 
-ece04 0 Electronics svn FPGA-lab ubuntu-12.04-x86_64 % % apache2
 ece05 0 Electronics bzr vlsi_vlab ubuntu-12.04-x86_64 % % bzr apache2
 ece06 0 Electronics svn dspVlab ubuntu-12.04-x86_64 % % apache2
-ece09 0 Electronics svn Wireless ubuntu-12.04-x86_64 % % apache2
-mech08 0 Mechanical svn vlkb_svn ubuntu-12.04-x86_64 % % apache2
 emt 0 svn Electromagmetic emt_new ubuntu-12.04-x86_64 % % apache2
 eerc01 0 Civil svn CEVL ubuntu-12.04-x86_64 % % apache2
 eerc02 0 Civil svn CEVL1 ubuntu-12.04-x86_64 % % apache2
