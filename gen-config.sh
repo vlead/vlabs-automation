@@ -208,6 +208,10 @@ for line in $(cat *_deps | sort -u);
     IFS=' '
     if [ "$deps" != "" ] ; then
      echo "$VZCTL $VZEXECCMD $ctid \"$SETPROXY $PKGMGR update -y\" " >> $CONFIG
+
+     # Install/Configure {bzr,git,svn} on all by default
+     echo "$VZCTL $VZEXECCMD  $ctid \"$SETPROXY $PKGMGR $PKGINSTALL bzr git subversion -y\" " >> $CONFIG
+
      for dep in $deps ; 
      do
        echo "$VZCTL $VZEXECCMD  $ctid \"$SETPROXY $PKGMGR $PKGINSTALL $dep -y\" " >> $CONFIG
