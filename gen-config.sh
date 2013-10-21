@@ -106,6 +106,7 @@ for line in $(cat *_deps | sort -u);
   # Check for invalid data
   if [ "$labid" == "" ] || [ "$repotype" == "" ] || [ "$reponame" == "" ] ; then 
     echo "Invalid data found skipping...."
+    continue
   fi
  
   #Set defaults for non-mandatory fields
