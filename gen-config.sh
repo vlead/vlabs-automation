@@ -6,7 +6,7 @@ ENDCTID=199
 DOMAIN="local"
 TESTSUBDOMAIN="test"
 ENV="-test"   # Leave it blank for production
-CONFIGPREFIX="vlabs.config"
+CONFIGPREFIX="vlabs-cmds.conf"
 PARALLEL="2"
 IPPREFIX="10.4.13."
 REPOUSER="svnadmin"
@@ -89,16 +89,17 @@ for line in $(cat *_deps | sort -u);
  do
   labid=`echo $line | cut -d' ' -f1`
   modflag=`echo $line | cut -d' ' -f2`
-  repotype=`echo $line | cut -d' ' -f3`
-  reponame=`echo $line | cut -d' ' -f4` 
-  ostemplate=`echo $line | cut -d' ' -f5`
-  diskspace=`echo $line | cut -d' ' -f6`
-  ram=`echo $line | cut -d' ' -f7`
-  deps=`echo $line | cut -d' ' -f8-17 | sed 's/'$DEFAULT'//g'` 
-  servs=`echo $line | cut -d' ' -f18-27 | sed 's/'$DEFAULT'//g'`
+  labdisc=`echo $line | cut -d' ' -f3`
+  repotype=`echo $line | cut -d' ' -f4`
+  reponame=`echo $line | cut -d' ' -f5` 
+  ostemplate=`echo $line | cut -d' ' -f6`
+  diskspace=`echo $line | cut -d' ' -f7`
+  ram=`echo $line | cut -d' ' -f8`
+  deps=`echo $line | cut -d' ' -f9-18 | sed 's/'$DEFAULT'//g'` 
+  servs=`echo $line | cut -d' ' -f19-28 | sed 's/'$DEFAULT'//g'`
 
-  # Ignore if header
-  if [ "$labid" == "labid" ] ; then
+  # Ignore if header or commented config
+  if [ "$labid" == "labid" ] || [ "$labid" == "#*" ] ; then
    continue
   fi
 

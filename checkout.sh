@@ -12,8 +12,9 @@ cat $DEPSFILE | while read line ;
 do
   modflag=`echo $line | awk -F' ' '{print $2}'`
   labid=`echo $line | awk -F' ' '{print $1}'`
-  repotype=`echo $line | awk -F' ' '{print $3}'`
-  reponame=`echo $line | awk -F' ' '{print $4}'`
+  labdisc=`echo $line | awk -F' ' '{print $3}'`
+  repotype=`echo $line | awk -F' ' '{print $4}'`
+  reponame=`echo $line | awk -F' ' '{print $5}'`
 
   echo $labid $repotype $reponame
   if [ $labid != "labid" ]; then   # Not header
