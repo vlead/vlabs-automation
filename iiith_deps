@@ -1,44 +1,44 @@
-labid modflag repotype reponame ostemplate diskspace ram deps1 deps2 deps3 deps4 deps5 deps6 deps7 deps8 deps9 deps10 serv1 serv2 serv3 serv4 serv5 serv6 serv7 serv8 serv9 serv10
-ccnsb01 0 svn Repo_lab_1 ubuntu-12.04-x86_64 % % apache2 
-ccnsb02 0 svn Repo_lab2_mod ubuntu-12.04-x86_64 % % apache2
-ccnsb03 0 svn Repo_lab_3 ubuntu-12.04-x86_64 % % apache2
-ccnsb04 0 svn repo ubuntu-12.04-x86_64 % % apache2
-ccnsb05 0 svn Repo_CD_4 ubuntu-12.04-x86_64 % % apache2
-ccnsb06 0 svn apc_new ubuntu-12.04-x86_64 % % apache2
-ccnsb07 0 svn ccnsb07 ubuntu-12.04-x86_64 % % apache2
-cse01 0 svn DS_NEW ubuntu-12.04-x86_64 % % apache2
-cse02 0 svn programming ubuntu-12.04-x86_64 % % apache2
-cse04 0 svn problem_solving ubuntu-12.04-x86_64 % % apache2
-cse05 0 svn popl-vlab ubuntu-12.04-x86_64 % % apache2 emacs
-cse06 0 svn new_release ubuntu-12.04-x86_64 % % apache2
-cse07 0 svn FirstMining ubuntu-12.04-x86_64 % % apache2
-cse08 0 svn se ubuntu-12.04-x86_64 % % apache2 
-cse09 1 svn cse09 ubuntu-12.04-x86_64 % % apache2 graphviz
-cse10 0 svn cse10 ubuntu-12.04-x86_64 % % apache2
-cse11 0 svn ComputerSystemOrganization ubuntu-12.04-x86_64 % % apache2
-cse13 0 svn Advanced_VLSI ubuntu-12.04-x86_64 % % apache2
-cse14 0 svn VLSI-Lab ubuntu-12.04-x86_64 % % apache2
-cse15 0 svn repo_dld ubuntu-12.04-x86_64 % % apache2
-cse16 0 svn Beta ubuntu-12.04-x86_64 % % apache2
-cse17 0 svn final ubuntu-12.04-x86_64 % % apache2
-cse18 0 svn CG_Vlabs ubuntu-12.04-x86_64 % % apache2
-cse19 1 svn CSE19a ubuntu-12.04-x86_64 % % apache2 libhighgui-dev libhighgui2.3 libcv-dev libcv2.3 php5-gd libopencv-contrib2.3 % % % apache2
-cse20 0 svn test ubuntu-12.04-x86_64 % % apache2
-cse21 0 svn Cse21_repo ubuntu-12.04-x86_64 % % apache2 
-cse22 0 svn Beta ubuntu-12.04-x86_64 % % apache2
-cse23 0 svn CL-vlab1 ubuntu-12.04-x86_64 % % apache2
-cse24 0 svn NLP-vlab2 ubuntu-12.04-x86_64 % % apache2
-cse29 0 bzr newui ubuntu-12.04-x86_64 % % bzr apache2
-cse30 0 svn test1 ubuntu-12.04-x86_64 % % apache2 
-ece04 0 svn FPGA-lab ubuntu-12.04-x86_64 % % apache2
-ece05 0 bzr vlsi_vlab ubuntu-12.04-x86_64 % % bzr apache2
-ece06 0 svn dspVlab ubuntu-12.04-x86_64 % % apache2
-ece09 0 svn Wireless ubuntu-12.04-x86_64 % % apache2
-mech08 0 svn vlkb_svn ubuntu-12.04-x86_64 % % apache2
-emt 0 svn emt_new ubuntu-12.04-x86_64 % % apache2
-eerc01 0 svn CEVL ubuntu-12.04-x86_64 % % apache2
-eerc02 0 svn CEVL1 ubuntu-12.04-x86_64 % % apache2
-eerc03 0 svn CEVL2 ubuntu-12.04-x86_64 % % apache2
-eerc04 0 svn CEVL3 ubuntu-12.04-x86_64 % % apache2
-eerc05 0 svn MEVL ubuntu-12.04-x86_64 % % apache2
-phy14 0 git physc ubuntu-12.04-x86_64 % % apache2
+labid modflag labdisc repotype reponame ostemplate diskspace ram deps1 deps2 deps3 deps4 deps5 deps6 deps7 deps8 deps9 deps10 serv1 serv2 serv3 serv4 serv5 serv6 serv7 serv8 serv9 serv10
+ccnsb01 0 Chemical-Sciences svn Repo_lab_1 ubuntu-12.04-x86_64 % % apache2 
+ccnsb02 0 Chemical-Sciences svn Repo_lab2_mod ubuntu-12.04-x86_64 % % apache2
+ccnsb03 0 Chemical-Sciences svn Repo_lab_3 ubuntu-12.04-x86_64 % % apache2
+ccnsb04 0 Chemical-Sciences svn repo ubuntu-12.04-x86_64 % % apache2
+ccnsb05 0 Chemical-Sciences svn Repo_CD_4 ubuntu-12.04-x86_64 % % apache2
+ccnsb06 0 Chemical-Sciences svn apc_new ubuntu-12.04-x86_64 % % apache2
+ccnsb07 0 Chemical-Sciences svn ccnsb07 ubuntu-12.04-x86_64 % % apache2
+cse01 0 Computer-Science svn DS_NEW ubuntu-12.04-x86_64 % % apache2
+cse02 0 Computer-Science svn programming ubuntu-12.04-x86_64 % % apache2
+cse04 0 Computer-Science svn problem_solving ubuntu-12.04-x86_64 % % apache2
+cse05 0 Computer-Science svn popl-vlab ubuntu-12.04-x86_64 % % apache2 emacs
+cse06 0 Computer-Science svn new_release ubuntu-12.04-x86_64 % % apache2
+cse07 0 Computer-Science svn FirstMining ubuntu-12.04-x86_64 % % apache2
+cse08 0 Computer-Science svn se ubuntu-12.04-x86_64 % % apache2 
+cse09 1 Computer-Science svn cse09 ubuntu-12.04-x86_64 % % apache2 graphviz
+cse10 0 Computer-Science svn cse10 ubuntu-12.04-x86_64 % % apache2
+cse11 0 Computer-Science svn ComputerSystemOrganization ubuntu-12.04-x86_64 % % apache2
+cse13 0 Computer-Science svn Advanced_VLSI ubuntu-12.04-x86_64 % % apache2
+cse14 0 Computer-Science svn VLSI-Lab ubuntu-12.04-x86_64 % % apache2
+cse15 0 Computer-Science svn repo_dld ubuntu-12.04-x86_64 % % apache2
+cse16 0 Computer-Science svn Beta ubuntu-12.04-x86_64 % % apache2
+cse17 0 Computer-Science svn final ubuntu-12.04-x86_64 % % apache2
+cse18 0 Computer-Science svn CG_Vlabs ubuntu-12.04-x86_64 % % apache2
+cse19 1 Computer-Science svn CSE19a ubuntu-12.04-x86_64 % % apache2 libhighgui-dev libhighgui2.3 libcv-dev libcv2.3 php5-gd libopencv-contrib2.3 % % % apache2
+cse20 0 Computer-Science svn test ubuntu-12.04-x86_64 % % apache2
+cse21 0 Computer-Science svn Cse21_repo ubuntu-12.04-x86_64 % % apache2 
+cse22 0 Computer-Science svn Beta ubuntu-12.04-x86_64 % % apache2
+cse23 0 Computer-Science svn CL-vlab1 ubuntu-12.04-x86_64 % % apache2
+cse24 0 Computer-Science svn NLP-vlab2 ubuntu-12.04-x86_64 % % apache2
+cse29 0 Computer-Science bzr newui ubuntu-12.04-x86_64 % % bzr apache2
+cse30 0 Computer-Science svn test1 ubuntu-12.04-x86_64 % % apache2 
+ece04 0 Electronics svn FPGA-lab ubuntu-12.04-x86_64 % % apache2
+ece05 0 Electronics bzr vlsi_vlab ubuntu-12.04-x86_64 % % bzr apache2
+ece06 0 Electronics svn dspVlab ubuntu-12.04-x86_64 % % apache2
+ece09 0 Electronics svn Wireless ubuntu-12.04-x86_64 % % apache2
+mech08 0 Mechanical svn vlkb_svn ubuntu-12.04-x86_64 % % apache2
+emt 0 svn Electromagmetic emt_new ubuntu-12.04-x86_64 % % apache2
+eerc01 0 Civil svn CEVL ubuntu-12.04-x86_64 % % apache2
+eerc02 0 Civil svn CEVL1 ubuntu-12.04-x86_64 % % apache2
+eerc03 0 Civil svn CEVL2 ubuntu-12.04-x86_64 % % apache2
+eerc04 0 Civil svn CEVL3 ubuntu-12.04-x86_64 % % apache2
+eerc05 0 Civil svn MEVL ubuntu-12.04-x86_64 % % apache2
+phy14 0 Physical-Science git physc ubuntu-12.04-x86_64 % % apache2
