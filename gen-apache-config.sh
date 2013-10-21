@@ -3,6 +3,8 @@
 ########VARIABLES###################
 CONF="/etc/httpd/conf.d/labs.conf"
 VHOST="vlead001"
+VHOSTALIAS="emcee.virtual-labs.ac.in"
+VDOCROOT="/var/www"
 ####################################
 
 #Customized echo function
@@ -27,6 +29,8 @@ vhost_list=$(vzlist -H -a -o ip,hostname -s hostname| sed 's/    //g')
 vecho "<VirtualHost *:80>           "
 vecho "    ServerAdmin help@$VHOST"
 vecho "    ServerName $VHOST"
+vecho "    ServerAlias $VHOSTALIAS"
+vecho "    DocumentRoot $VDOCROOT"
 vecho "    ErrorLog logs/$VHOST-error_log"
 vecho "    CustomLog logs/$VHOST-access_log combined"
 vecho "    # Pass Proxy For labs"
@@ -45,9 +49,6 @@ do
 done
 
 # End the configuration with static stuff
-vecho "    <Location />"
-vecho "        ProxyPass http://localhost/"
-vecho "    </Location>"
 vecho "</virtualHost>"
 
 # Restart Apache
