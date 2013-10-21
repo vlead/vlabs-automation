@@ -4,7 +4,7 @@
 DOMAIN="local"
 TESTSUBDOMAIN="test"
 ENV="test"   # Leave it blank for production
-CONFIGPREFIX="vlabs.config"
+CONFIGPREFIX="vlabs-cmds.conf"
 PARALLEL="4"
 ##########################################
 
