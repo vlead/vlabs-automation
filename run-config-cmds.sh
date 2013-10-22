@@ -16,6 +16,7 @@ CONFIGPREFIX="vlabs-cmds.conf"
 LOGPREFIX="./logs/"
 PARALLEL="2"
 LOGLEVEL="1"
+FORCERUN="0"
 ##########################################
 
 # Error message if the script is not run with root privileges"
@@ -28,31 +29,43 @@ fi
 execute_cmds()
  {
   IFS=$'\n'
+  errflag=0
   for cmd in $(cat $1);
   do
   # echo $cmd
    if [ "`echo $cmd | grep '^#'`" == "$cmd" ] ; then
     #This is a comment, parse arguments to get the hostname
-    LOGFILE=$LOGPREFIX/$(echo $cmd | sed 's/#//g')
+    COMMENT=$(echo $cmd | sed 's/#//g')
+    if [ "`echo $COMMENT | grep '\-start'`" == "$COMMENT" ] ; then
+     errflag=0
+     LOGFILE=$LOGPREFIX/$(echo $COMMENT | sed 's/-start//g')
+    fi
+
     if [ -f "$LOGFILE.log" ] ; then
       rm -rf $LOGFILE.log
     fi
    else
-    #This is a command, just execute it and send output to the logfile
-    if [ "$LOGLEVEL" = "1" ] ; then
-      #Verbose logging
-      echo "VDEBUG: Executing [[ $cmd ]] " >> $LOGFILE.log
-    fi
-    eval $cmd >> $LOGFILE.log 2>&1
-    EXITSTATUS=$?
-    if [ "$EXITSTATUS" != 0 ] ; then
-      echo "VERROR: Error occured. Unable to continue" >> $LOGFILE.log
-      break
-    fi
-   fi
+    #This is a command, just execute it if there are no previous errors and send output to the logfile
+    if [ "$errflag" == 0 ] ; then
+       if [ "$LOGLEVEL" = "1" ] ; then
+          #Verbose logging
+          echo "VDEBUG: Executing [[ $cmd ]] " >> $LOGFILE.log
+       fi
+        eval $cmd >> $LOGFILE.log 2>&1
+       EXITSTATUS=$?
+       if [ "$EXITSTATUS" != 0 ] ; then
+         echo "VERROR: Error occured. Unable to continue" >> $LOGFILE.log
+	 # If forcerun flag is set, dont change the error flag
+         if [ "$FORCERUN" == "0" ] ; then
+          errflag=1
+         fi # End of force run check
+       fi # End of command exit status check
+    fi  # End of error flag check
+   fi # End of previous error check
   done
  }
 
+# Main Control
 i=0
 while [ "$i" \< "$PARALLEL" ];  
 do 
@@ -60,3 +73,10 @@ do
   execute_cmds ./$CONFIGPREFIX.$i & 
   i=`expr $i + 1`
 done
+
+wait
+# Generate new Apache config
+./gen-apache-config.sh
+
+# Generate new labs-info
+./gen-lab-info.sh
