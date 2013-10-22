@@ -2,6 +2,7 @@ labid modflag labdisc repotype reponame ostemplate diskspace ram deps1 deps2 dep
 ece09 1 Electronics bzr ece09 % % % httpd
 ece08 1 Electronics bzr ece08 % % 512M httpd
 ece28 1 Electronics bzr ece28 % % % httpd
+ece21 0 Electronics bzr ece21 % % % httpd
 eee07 1 Electrical bzr eee07 % % % httpd
 civil16 1 Civil bzr civil16 % % % httpd
 bio15 1 Biotechnology bzr bio15 % % 800M httpd
