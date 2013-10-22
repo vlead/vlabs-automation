@@ -14,6 +14,7 @@ REPOPASS="adminsvn"
 REPOHOST="svn.virtual-labs.ac.in"
 BUILDUSER="root"
 BUILDDIR="~$BUILDUSER"
+DEPLOYDIR="/var/www/html"
 RSAKEY="id_svnadmin_rsa"
 SLEEPSECS="10"
 SETPROXY="export http_proxy='http://proxy.iiit.ac.in:8080';"
@@ -190,6 +191,7 @@ for line in $(cat *_deps | sort -u);
         SRVENABLE="enable"
         SRVDISABLE="disable"
         SRVREMOVE="remove"
+	DEPLOYDIR="/var/www"
         ;;
     centos | fedora | scientific | suse | *)
         PKGMGR="yum"
@@ -200,6 +202,7 @@ for line in $(cat *_deps | sort -u);
         SRVENABLE="on"
         SRVDISABLE="off"
         SRVREMOVE="--del"
+	DEPLOYDIR="/var/www/html"
         ;;
     esac
 
@@ -249,7 +252,7 @@ for line in $(cat *_deps | sort -u);
 
     # Run the make-file to build, deploy and run basic test
     echo "$VZCTL $VZEXECCMD $ctid \"cd $BUILDDIR/$labid/src; make\" " >> $CONFIG
-    echo "$VZCTL $VZEXECCMD $ctid \"rsync -avz $BUILDDIR/$labid/build/ /var/www/ \" " >> $CONFIG
+    echo "$VZCTL $VZEXECCMD $ctid \"rsync -avz $BUILDDIR/$labid/build/ $DEPLOYDIR \" " >> $CONFIG
     
     # Blank line indicating end of the lab
     echo "" >> $CONFIG
