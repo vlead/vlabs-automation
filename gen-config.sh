@@ -2,7 +2,7 @@
 
 ##################GLOBALS#################
 STARTCTID=100
-ENDCTID=199
+ENDCTID=255
 DOMAIN="local"
 TESTSUBDOMAIN="test"
 ENV="-test"   # Leave it blank for production
@@ -105,12 +105,23 @@ for line in $(cat *_deps | sort -u);
   fi
 
   # Check for invalid data
-  if [ "$labid" == "" ] || [ "$repotype" == "" ] || [ "$reponame" == "" ] ; then 
+  if [ "$labid" == "" ] ; then 
     echo "Invalid data found skipping...."
     continue
   fi
  
   #Set defaults for non-mandatory fields
+
+  if [ "$repotype" == "" ] || [ "$repotype" == "$DEFAULT" ] ; then
+    # Default repotype is bzr
+    repotype="bzr"
+  fi
+
+  if [ "$reponame" == "" ] || [ "$reponame" == "$DEFAULT" ] ; then
+    # Default reponame is labid 
+    reponame="$labid"
+  fi
+ 
   if [ "$ostemplate" == "" ] || [ "$ostemplate" == "$DEFAULT" ] ; then
     ostemplate=$OSTEMPLATE
   fi
@@ -134,34 +145,45 @@ for line in $(cat *_deps | sort -u);
    do
         # Extra container running mark for deletion
         delctid=$($VZLIST -H -a -o ctid -h $vhost.$DOMAIN | sed 's/^[ \t]*//g')
-        echo "########$vhost############" >> $CONFIG
-	echo "echo \"########$vhost############\"" >> $CONFIG
+        echo "########$vhost-start############" >> $CONFIG
+	echo "echo \"###$vhost##CTID=$delctid###\"" >> $CONFIG
+	echo "echo \"\$date\"" >> $CONFIG
         echo "$VZCTL stop $delctid" >> $CONFIG
 #       echo "$VZCTL destroy $delctid" >> $CONFIG
         echo "" >> $CONFIG
         vhost_list=$(echo $vhost_list | cut -d' ' -f2-400)
         vhost=$(echo $vhost_list | cut -d' ' -f1)
         COUNT=`expr $COUNT + 1`
+	echo "########$vhost-end############" >> $CONFIG
    done
 
   if [ "$labhost" == "$vhost" ]; then
      # Container and config both exist , just update config if modflag is set
    if [ "$modflag" == "1" ]; then 
-     echo "########$labhost############" >> $CONFIG
-     echo "echo \"########$labhost############\"" >> $CONFIG
+     echo "########$labhost-start############" >> $CONFIG
      ctid=$($VZLIST -H -a -o ctid -h $vhost.$DOMAIN | sed 's/^[ \t]*//g')
+     echo "echo \"###$labhost##CTID=$ctid###\"" >> $CONFIG
+     echo "echo \"\$date\"" >> $CONFIG
      echo "$VZCTL set $ctid --diskspace $diskspace --ram $ram --nameserver $NAMESERVER --save" >> $CONFIG
      COUNT=`expr $COUNT + 1`
    fi
    vhost_list=$(echo $vhost_list | cut -d' ' -f2-400)
   else 
-    # Newly added lab - mark for creation
+
+    ## Newly added lab - mark for creation
     # Pick next available id from vid_list_available
     ctid=$(echo $vid_list_available | cut -d' ' -f1)  
+    # If no more VIDs are available echo an error message
+    if [ "$ctid" == "" ] ; then 
+      echo "Available VIDs and IPs Exhausted...Unable to create new VMs.."
+      continue
+    fi
+
     # Force modflag=1
     modflag=1
-    echo "########$labhost############" >> $CONFIG
-    echo "echo \"########$labhost############\"" >> $CONFIG
+    echo "########$labhost-start############" >> $CONFIG
+    echo "echo \"###$labhost##CTID=$ctid##IP=$IPPREFIX$ctid##OS=$ostemplate########\"" >> $CONFIG
+    echo "echo \"\$date\"" >> $CONFIG
     # Strip the ctid we used 
     vid_list_available=$(echo $vid_list_available | cut -d' ' -f2-400)
     
@@ -254,7 +276,8 @@ for line in $(cat *_deps | sort -u);
     echo "$VZCTL $VZEXECCMD $ctid \"cd $BUILDDIR/$labid/src; make\" " >> $CONFIG
     echo "$VZCTL $VZEXECCMD $ctid \"rsync -avz $BUILDDIR/$labid/build/ $DEPLOYDIR \" " >> $CONFIG
     
-    # Blank line indicating end of the lab
+    # Indicate end of the lab config
+    echo "########$vhost-end############" >> $CONFIG
     echo "" >> $CONFIG
   fi  # End of if loop for modflag
 
@@ -264,11 +287,12 @@ done # End of while loop
 for vhost in $vhost_list; do
    delctid=$($VZLIST -H -a -o ctid -h $vhost.$DOMAIN | sed 's/^[ \t]*//g')
    CONFIG=$CONFIGPREFIX.`expr $COUNT % $PARALLEL`
-   echo "########$vhost############" >> $CONFIG
-   echo "echo \"########$vhost############\"" >> $CONFIG
+   echo "########$vhost-start############" >> $CONFIG
+   echo "echo \"##$vhost##CTID=$delctid###\"" >> $CONFIG
    echo "$VZCTL stop $delctid" >> $CONFIG
 #   echo "$VZCTL destroy $delctid" >> $CONFIG
    echo "" >> $CONFIG
    vhost_list=$(echo $vhost_list | cut -d' ' -f2-400)
    COUNT=`expr $COUNT + 1`
+   echo "########$vhost-end############" >> $CONFIG
 done
