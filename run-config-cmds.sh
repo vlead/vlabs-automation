@@ -13,6 +13,7 @@ DOMAIN="local"
 TESTSUBDOMAIN="test"
 ENV="test"   # Leave it blank for production
 CONFIGPREFIX="vlabs-cmds.conf"
+LOGPREFIX="./logs/"
 PARALLEL="2"
 ##########################################
 
@@ -31,7 +32,7 @@ execute_cmds()
   # echo $cmd
    if [ "`echo $cmd | grep '^#'`" == "$cmd" ] ; then
     #This is a comment, parse arguments to get the hostname
-    LOGFILE=$(echo $cmd | sed 's/#//g')
+    LOGFILE=$LOGPREFIX/$(echo $cmd | sed 's/#//g')
     if [ -f "$LOGFILE.log" ] ; then
       rm -rf $LOGFILE.log
     fi
