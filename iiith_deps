@@ -13,7 +13,7 @@ cse05 0 Computer-Science svn popl-vlab ubuntu-12.04-x86_64 % % apache2 emacs
 cse06 0 Computer-Science svn new_release ubuntu-12.04-x86_64 % % apache2
 cse07 0 Computer-Science svn FirstMining ubuntu-12.04-x86_64 % % apache2
 cse08 0 Computer-Science svn se ubuntu-12.04-x86_64 % % apache2 
-cse09 1 Computer-Science svn cse09 ubuntu-12.04-x86_64 % % apache2 graphviz
+cse09 0 Computer-Science svn cse09 ubuntu-12.04-x86_64 % % apache2 graphviz
 cse10 0 Computer-Science svn cse10 ubuntu-12.04-x86_64 % % apache2
 cse11 0 Computer-Science svn ComputerSystemOrganization ubuntu-12.04-x86_64 % % apache2
 cse13 0 Computer-Science svn Advanced_VLSI ubuntu-12.04-x86_64 % % apache2
@@ -22,7 +22,7 @@ cse15 0 Computer-Science svn repo_dld ubuntu-12.04-x86_64 % % apache2
 cse16 0 Computer-Science svn Beta ubuntu-12.04-x86_64 % % apache2
 cse17 0 Computer-Science svn final ubuntu-12.04-x86_64 % % apache2
 cse18 0 Computer-Science svn CG_Vlabs ubuntu-12.04-x86_64 % % apache2
-cse19 1 Computer-Science svn CSE19a ubuntu-12.04-x86_64 % % apache2 libhighgui-dev libhighgui2.3 libcv-dev libcv2.3 php5-gd libopencv-contrib2.3 % % % apache2
+cse19 0 Computer-Science svn CSE19a ubuntu-12.04-x86_64 % % apache2 libhighgui-dev libhighgui2.3 libcv-dev libcv2.3 php5-gd libopencv-contrib2.3 % % % apache2
 cse20 0 Computer-Science svn test ubuntu-12.04-x86_64 % % apache2
 cse21 0 Computer-Science svn Cse21_repo ubuntu-12.04-x86_64 % % apache2 
 cse22 0 Computer-Science svn Beta ubuntu-12.04-x86_64 % % apache2
