@@ -15,6 +15,7 @@ ENV="test"   # Leave it blank for production
 CONFIGPREFIX="vlabs-cmds.conf"
 LOGPREFIX="./logs/"
 PARALLEL="2"
+LOGLEVEL="1"
 ##########################################
 
 # Error message if the script is not run with root privileges"
@@ -38,7 +39,16 @@ execute_cmds()
     fi
    else
     #This is a command, just execute it and send output to the logfile
+    if [ "$LOGLEVEL" = "1" ] ; then
+      #Verbose logging
+      echo "VDEBUG: Executing [[ $cmd ]] " >> $LOGFILE.log
+    fi
     eval $cmd >> $LOGFILE.log 2>&1
+    EXITSTATUS=$?
+    if [ "$EXITSTATUS" != 0 ] ; then
+      echo "VERROR: Error occured. Unable to continue" >> >> $LOGFILE.log
+      break
+    fi
    fi
   done
  }
