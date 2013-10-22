@@ -177,7 +177,7 @@ for line in $(cat *_deps | sort -u);
     COUNT=`expr $COUNT + 1`
   fi
 
-  if [ "$modflag" == 1 ] ; then
+  if [ "$modflag" == "1" ] ; then
     # Check OS Architecture and Install dependencies (1-10)
     OSARCH=$(echo $ostemplate | cut -d'-' -f1)
     case $OSARCH in 
@@ -205,15 +205,17 @@ for line in $(cat *_deps | sort -u);
 
     # First sleep for 15 secs for previous changes to get affect
     echo "sleep $SLEEPSECS" >> $CONFIG
-    # Install Dependencies
+
+    ## Install Dependencies
+    echo "$VZCTL $VZEXECCMD $ctid \"$SETPROXY $PKGMGR update -y\" " >> $CONFIG
+
+    # Install/Configure {bzr,git,svn} on all by default
+    echo "$VZCTL $VZEXECCMD  $ctid \"$SETPROXY $PKGMGR $PKGINSTALL bzr git subversion -y\" " >> $CONFIG
+
+    # Install/Configure other packages as requested
     oldifs=$IFS
     IFS=' '
     if [ "$deps" != "" ] ; then
-     echo "$VZCTL $VZEXECCMD $ctid \"$SETPROXY $PKGMGR update -y\" " >> $CONFIG
-
-     # Install/Configure {bzr,git,svn} on all by default
-     echo "$VZCTL $VZEXECCMD  $ctid \"$SETPROXY $PKGMGR $PKGINSTALL bzr git subversion -y\" " >> $CONFIG
-
      for dep in $deps ; 
      do
        echo "$VZCTL $VZEXECCMD  $ctid \"$SETPROXY $PKGMGR $PKGINSTALL $dep -y\" " >> $CONFIG
