@@ -2,7 +2,7 @@ labid modflag labdisc repotype reponame ostemplate diskspace ram deps1 deps2 dep
 ccnsb01 0 Chemical-Science svn Repo_lab_1 ubuntu-12.04-x86_64 % % apache2 
 ccnsb02 0 Chemical-Science svn Repo_lab2_mod ubuntu-12.04-x86_64 % % apache2
 ccnsb03 0 Chemical-Science svn Repo_lab_3 ubuntu-12.04-x86_64 % % apache2
-ccnsb04 0 Chemical-Science svn repo ubuntu-12.04-x86_64 % % apache2
+ccnsb04 0 Chemical-Science svn repo ubuntu-12.04-x86_64 2G % apache2
 ccnsb05 0 Chemical-Science svn Repo_CD_4 ubuntu-12.04-x86_64 % % apache2
 ccnsb06 0 Chemical-Science svn apc_new ubuntu-12.04-x86_64 % % apache2
 ccnsb07 0 Chemical-Science svn ccnsb07 ubuntu-12.04-x86_64 % % apache2
@@ -38,4 +38,4 @@ eerc02 0 Civil svn CEVL1 ubuntu-12.04-x86_64 % % apache2
 eerc03 0 Civil svn CEVL2 ubuntu-12.04-x86_64 % % apache2
 eerc04 0 Civil svn CEVL3 ubuntu-12.04-x86_64 % % apache2
 eerc05 0 Civil svn MEVL ubuntu-12.04-x86_64 % % apache2
-phy14 0 Physical-Science git physc ubuntu-12.04-x86_64 % % apache2
+phy14 0 Physical-Science git physc ubuntu-12.04-x86_64 3G % apache2
