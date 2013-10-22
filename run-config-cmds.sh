@@ -46,7 +46,7 @@ execute_cmds()
     eval $cmd >> $LOGFILE.log 2>&1
     EXITSTATUS=$?
     if [ "$EXITSTATUS" != 0 ] ; then
-      echo "VERROR: Error occured. Unable to continue" >> >> $LOGFILE.log
+      echo "VERROR: Error occured. Unable to continue" >> $LOGFILE.log
       break
     fi
    fi
