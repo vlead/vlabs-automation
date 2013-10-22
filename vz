@@ -24,6 +24,7 @@ while [ "$sctid" \< "$ectid" ] ; do
  vzctl $OPER1 $sctid
  if [ "$OPER2" != "" ] ; then
     vzctl $OPER2 $sctid
+    sleep 10
  fi
  sctid=`expr $sctid + 1`
 done
