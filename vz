@@ -7,7 +7,8 @@ case $1 in
   OPER1="start"
   ;; 
  restart)
-  OPER1="restart"
+  OPER1="stop"
+  OPER2="start"
   ;;
  destroy)
   OPER1="destroy"
