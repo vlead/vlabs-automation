@@ -16,6 +16,7 @@ mech30 0 Mechanical
 phy01 0 Physical-Sciences bzr phy01
 phy15 0 Physical-Sciences
 phy16 0 Physical-Sciences
+phy19 0 Physical-Sciences bzr phy19
 chs13 0 Chemical-Science bzr chs13
-aero01 0 Aerospace
+aero01 0 Aerospace bzr ae01
 aero02 0 Aerospace

@@ -4,8 +4,8 @@ ece13 0 Electronics
 mech07 0 Mechanical
 mech25 0 Mechanical
 che02 0 Chemical-Science bzr che02
-bio01 0 Biotechnology
-bio02 0 Biotechnology
+bio01 1 Biotechnology
+bio02 1 Biotechnology
 bio03 0 Biotechnology
 bio04 0 Biotechnology
 bio05 0 Biotechnology
