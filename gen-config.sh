@@ -291,7 +291,7 @@ for line in $(cat *_deps | sort -u);
     echo "wget --no-proxy $IPPREFIX$ctid/$DEPLOYVERFILE -O $DEPLOYVERFILE" >> $CONFIG
     echo "if [ \"\$randomtext\" == \"\`grep Randomtext $DEPLOYVERFILE | cut -d':' -f2 | sed 's/^[ \t]*//g'\`\" ] ; then \
     echo \"VTEST: Success\"; else echo \"VTEST: Failure\"; fi" >> $CONFIG
-    echo "$VZCTL $VZEXECCMD $ctid \"echo \"******************************\" >> $DEPLOYDIR/$DEPLOYVERFILE\" " >> $CONFIG
+    echo "$VZCTL $VZEXECCMD $ctid \"echo \\\"******************************\\\" >> $DEPLOYDIR/$DEPLOYVERFILE\" " >> $CONFIG
 
     # Indicate end of the lab config
     echo "########$labhost-end############" >> $CONFIG
