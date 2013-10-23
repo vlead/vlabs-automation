@@ -23,7 +23,7 @@ vecho()
   fi
 
 #Get a list of all the containers and their IPs
-vhost_list=$(vzlist -H -a -o ip,hostname -s hostname| sed 's/    //g')
+vhost_list=$(vzlist -H -a -o ip,hostname -s hostname| sed 's/ \+/ /g')
 
 #Start echoing static stuff to the configuration file
 vecho "<VirtualHost *:80>           "
