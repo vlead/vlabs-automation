@@ -7,7 +7,7 @@ DOMAIN="local"
 TESTSUBDOMAIN="test"
 ENV="-test"   # Leave it blank for production
 CONFIGPREFIX="vlabs-cmds.conf"
-PARALLEL="2"
+PARALLEL="3"
 IPPREFIX="10.4.13."
 REPOUSER="svnadmin"
 REPOPASS="adminsvn"
@@ -277,7 +277,7 @@ for line in $(cat *_deps | sort -u);
     # Run the make-file to build and deploy the lab
     echo "$VZCTL $VZEXECCMD $ctid \"cd $BUILDDIR/$labid/src; make\" " >> $CONFIG
     echo "$VZCTL $VZEXECCMD $ctid \"rsync -avz $BUILDDIR/$labid/build/ $DEPLOYDIR \" " >> $CONFIG
-    echo "$VZCTL $VZEXECCMD $ctid \"echo \"******************************\" > $DEPLOYDIR/$DEPLOYVERFILE\" " >> $CONFIG
+    echo "$VZCTL $VZEXECCMD $ctid \"echo \\\"**************************************************\\\" > $DEPLOYDIR/$DEPLOYVERFILE\" " >> $CONFIG
     echo "$VZCTL $VZEXECCMD $ctid \"echo $'\t'Deployed Date: \"\`date\`\"$'\n'$'\t'Labid: $labid$'\n'$'\t'Repotype: $repotype >> $DEPLOYDIR/$DEPLOYVERFILE\" " >> $CONFIG
     echo "$VZCTL $VZEXECCMD $ctid \"echo $'\t'LabDiscipline: $labdisc$'\n'$'\t'ContainerID: $ctid$'\n'$'\t'LocalIP: $IPPREFIX$ctid >> $DEPLOYDIR/$DEPLOYVERFILE\" " >> $CONFIG
     echo "$VZCTL $VZEXECCMD $ctid \"echo $'\t'Domain: $DOMAIN$'\n'$'\t'Environment: $ENV$'\n'$'\t'Modflag: $modflag >> $DEPLOYDIR/$DEPLOYVERFILE\" " >> $CONFIG
@@ -291,7 +291,7 @@ for line in $(cat *_deps | sort -u);
     echo "wget --no-proxy $IPPREFIX$ctid/$DEPLOYVERFILE -O $DEPLOYVERFILE" >> $CONFIG
     echo "if [ \"\$randomtext\" == \"\`grep Randomtext $DEPLOYVERFILE | cut -d':' -f2 | sed 's/^[ \t]*//g'\`\" ] ; then \
     echo \"VTEST: Success\"; else echo \"VTEST: Failure\"; fi" >> $CONFIG
-    echo "$VZCTL $VZEXECCMD $ctid \"echo \\\"******************************\\\" >> $DEPLOYDIR/$DEPLOYVERFILE\" " >> $CONFIG
+    echo "$VZCTL $VZEXECCMD $ctid \"echo \\\"**************************************************\\\" > $DEPLOYDIR/$DEPLOYVERFILE\" " >> $CONFIG
 
     # Indicate end of the lab config
     echo "########$labhost-end############" >> $CONFIG
