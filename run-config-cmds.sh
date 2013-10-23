@@ -16,7 +16,7 @@ CONFIGPREFIX="vlabs-cmds.conf"
 LOGPREFIX="./logs/"
 PARALLEL="2"
 LOGLEVEL="1"
-FORCERUN="0"
+FORCERUN="1"
 ##########################################
 
 # Error message if the script is not run with root privileges"
@@ -39,10 +39,9 @@ execute_cmds()
     if [ "`echo $COMMENT | grep '\-start'`" == "$COMMENT" ] ; then
      errflag=0
      LOGFILE=$LOGPREFIX/$(echo $COMMENT | sed 's/-start//g')
-    fi
-
-    if [ -f "$LOGFILE.log" ] ; then
-      rm -rf $LOGFILE.log
+      if [ -f "$LOGFILE.log" ] ; then
+        rm -rf $LOGFILE.log
+      fi
     fi
    else
     #This is a command, just execute it if there are no previous errors and send output to the logfile
