@@ -15,6 +15,8 @@ REPOHOST="svn.virtual-labs.ac.in"
 BUILDUSER="root"
 BUILDDIR="~$BUILDUSER"
 DEPLOYDIR="/var/www/html"
+DEPLOYVERFILE="vlabs-version.txt"
+DEPLOYHOSTALIAS="emcee.virtual-labs.ac.in"
 RSAKEY="id_svnadmin_rsa"
 SLEEPSECS="10"
 SETPROXY="export http_proxy='http://proxy.iiit.ac.in:8080';"
@@ -146,15 +148,15 @@ for line in $(cat *_deps | sort -u);
         # Extra container running mark for deletion
         delctid=$($VZLIST -H -a -o ctid -h $vhost.$DOMAIN | sed 's/^[ \t]*//g')
         echo "########$vhost-start############" >> $CONFIG
-	echo "echo \"###$vhost##CTID=$delctid###\"" >> $CONFIG
-	echo "echo \"\$date\"" >> $CONFIG
+	echo "echo \"###HOST=$vhost##CTID=$delctid###\"" >> $CONFIG
+	echo "echo \"\`date\`\"" >> $CONFIG
         echo "$VZCTL stop $delctid" >> $CONFIG
 #       echo "$VZCTL destroy $delctid" >> $CONFIG
+	echo "########$vhost-end############" >> $CONFIG
         echo "" >> $CONFIG
         vhost_list=$(echo $vhost_list | cut -d' ' -f2-400)
         vhost=$(echo $vhost_list | cut -d' ' -f1)
         COUNT=`expr $COUNT + 1`
-	echo "########$vhost-end############" >> $CONFIG
    done
 
   if [ "$labhost" == "$vhost" ]; then
@@ -162,8 +164,8 @@ for line in $(cat *_deps | sort -u);
    if [ "$modflag" == "1" ]; then 
      echo "########$labhost-start############" >> $CONFIG
      ctid=$($VZLIST -H -a -o ctid -h $vhost.$DOMAIN | sed 's/^[ \t]*//g')
-     echo "echo \"###$labhost##CTID=$ctid###\"" >> $CONFIG
-     echo "echo \"\$date\"" >> $CONFIG
+     echo "echo \"###HOST=$labhost##CTID=$ctid###\"" >> $CONFIG
+     echo "echo \"\`date\`\"" >> $CONFIG
      echo "$VZCTL set $ctid --diskspace $diskspace --ram $ram --nameserver $NAMESERVER --save" >> $CONFIG
      COUNT=`expr $COUNT + 1`
    fi
@@ -182,8 +184,8 @@ for line in $(cat *_deps | sort -u);
     # Force modflag=1
     modflag=1
     echo "########$labhost-start############" >> $CONFIG
-    echo "echo \"###$labhost##CTID=$ctid##IP=$IPPREFIX$ctid##OS=$ostemplate########\"" >> $CONFIG
-    echo "echo \"\$date\"" >> $CONFIG
+    echo "echo \"###HOST=$labhost##CTID=$ctid##IP=$IPPREFIX$ctid##OS=$ostemplate###\"" >> $CONFIG
+    echo "echo \"\`date\`\"" >> $CONFIG
     # Strip the ctid we used 
     vid_list_available=$(echo $vid_list_available | cut -d' ' -f2-400)
     
@@ -272,12 +274,27 @@ for line in $(cat *_deps | sort -u);
     echo "$VZCTL $VZEXECCMD $ctid \"rm -rf $BUILDDIR/$labid\" " >> $CONFIG 
     echo "$VZCTL $VZEXECCMD $ctid \"$repotype $OPER $repotype+ssh://$REPOUSER@$REPOHOST/labs/$labid/$repotype/$reponame$BZREXTRA $BUILDDIR/$labid\" " >> $CONFIG 
 
-    # Run the make-file to build, deploy and run basic test
+    # Run the make-file to build and deploy the lab
     echo "$VZCTL $VZEXECCMD $ctid \"cd $BUILDDIR/$labid/src; make\" " >> $CONFIG
     echo "$VZCTL $VZEXECCMD $ctid \"rsync -avz $BUILDDIR/$labid/build/ $DEPLOYDIR \" " >> $CONFIG
-    
+    echo "$VZCTL $VZEXECCMD $ctid \"echo \"******************************\" > $DEPLOYDIR/$DEPLOYVERFILE\" " >> $CONFIG
+    echo "$VZCTL $VZEXECCMD $ctid \"echo $'\t'Deployed Date: \"\`date\`\"$'\n'$'\t'Labid: $labid$'\n'$'\t'Repotype: $repotype >> $DEPLOYDIR/$DEPLOYVERFILE\" " >> $CONFIG
+    echo "$VZCTL $VZEXECCMD $ctid \"echo $'\t'LabDiscipline: $labdisc$'\n'$'\t'ContainerID: $ctid$'\n'$'\t'LocalIP: $IPPREFIX$ctid >> $DEPLOYDIR/$DEPLOYVERFILE\" " >> $CONFIG
+    echo "$VZCTL $VZEXECCMD $ctid \"echo $'\t'Domain: $DOMAIN$'\n'$'\t'Environment: $ENV$'\n'$'\t'Modflag: $modflag >> $DEPLOYDIR/$DEPLOYVERFILE\" " >> $CONFIG
+    echo "$VZCTL $VZEXECCMD $ctid \"echo $'\t'RepoName: $reponame$'\n'$'\t'OSTemplate: $ostemplate$'\n'$'\t'Diskspace: $diskspace >> $DEPLOYDIR/$DEPLOYVERFILE\" " >> $CONFIG
+    echo "$VZCTL $VZEXECCMD $ctid \"echo $'\t'RAM: $ram$'\n'$'\t'Package Dependencies: $deps$'\n'$'\t'Services: $servs$'\n'$'\t'DeployLocation: $DEPLOYDIR >> $DEPLOYDIR/$DEPLOYVERFILE\" " >> $CONFIG
+
+    # Simple Automatic testing
+    # Echo a random text into the version file and then access it using wget and verify the content is same
+    echo "randomtext=\`echo \"\\\`date\\\`\" | md5sum | sed 's/[ \t]*//g'\`" >> $CONFIG
+    echo "$VZCTL $VZEXECCMD $ctid \"echo  $'\t'Randomtext: \"\$randomtext\" >> $DEPLOYDIR/$DEPLOYVERFILE\" " >> $CONFIG
+    echo "wget --no-proxy $IPPREFIX$ctid/$DEPLOYVERFILE -O $DEPLOYVERFILE" >> $CONFIG
+    echo "if [ \"\$randomtext\" == \"\`grep Randomtext $DEPLOYVERFILE | cut -d':' -f2 | sed 's/^[ \t]*//g'\`\" ] ; then \
+    echo \"VTEST: Success\"; else echo \"VTEST: Failure\"; fi" >> $CONFIG
+    echo "$VZCTL $VZEXECCMD $ctid \"echo \"******************************\" >> $DEPLOYDIR/$DEPLOYVERFILE\" " >> $CONFIG
+
     # Indicate end of the lab config
-    echo "########$vhost-end############" >> $CONFIG
+    echo "########$labhost-end############" >> $CONFIG
     echo "" >> $CONFIG
   fi  # End of if loop for modflag
 
@@ -288,7 +305,7 @@ for vhost in $vhost_list; do
    delctid=$($VZLIST -H -a -o ctid -h $vhost.$DOMAIN | sed 's/^[ \t]*//g')
    CONFIG=$CONFIGPREFIX.`expr $COUNT % $PARALLEL`
    echo "########$vhost-start############" >> $CONFIG
-   echo "echo \"##$vhost##CTID=$delctid###\"" >> $CONFIG
+   echo "echo \"###HOST=$vhost##CTID=$delctid###\"" >> $CONFIG
    echo "$VZCTL stop $delctid" >> $CONFIG
 #   echo "$VZCTL destroy $delctid" >> $CONFIG
    echo "" >> $CONFIG
