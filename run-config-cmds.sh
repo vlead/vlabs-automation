@@ -14,7 +14,7 @@ TESTSUBDOMAIN="test"
 ENV="test"   # Leave it blank for production
 CONFIGPREFIX="vlabs-cmds.conf"
 LOGPREFIX="./logs/"
-PARALLEL="2"
+PARALLEL="3"
 LOGLEVEL="1"
 FORCERUN="1"
 ##########################################
