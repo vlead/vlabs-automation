@@ -1,7 +1,7 @@
 #!/bin/sh
 
 ##################GLOBALS#################
-STARTCTID=100
+STARTCTID=50
 ENDCTID=255
 DOMAIN="local"
 TESTSUBDOMAIN="test"
@@ -276,6 +276,7 @@ for line in $(cat *_deps | sort -u);
 
     # Run the make-file to build and deploy the lab
     echo "$VZCTL $VZEXECCMD $ctid \"cd $BUILDDIR/$labid/src; make\" " >> $CONFIG
+    echo "$VZCTL $VZEXECCMD $ctid \"rm -rf $DEPLOYDIR/* \" " >> $CONFIG
     echo "$VZCTL $VZEXECCMD $ctid \"rsync -avz $BUILDDIR/$labid/build/ $DEPLOYDIR \" " >> $CONFIG
     echo "$VZCTL $VZEXECCMD $ctid \"echo \\\"**************************************************\\\" > $DEPLOYDIR/$DEPLOYVERFILE\" " >> $CONFIG
     echo "$VZCTL $VZEXECCMD $ctid \"echo $'\t'Deployed Date: \"\`date\`\"$'\n'$'\t'Labid: $labid$'\n'$'\t'Repotype: $repotype >> $DEPLOYDIR/$DEPLOYVERFILE\" " >> $CONFIG
