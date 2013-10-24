@@ -31,19 +31,17 @@ vhost_list=$(vzlist -H -a -o ip,hostname -s hostname| sed 's/ \+/ /g')
 #Start echoing static stuff to the configuration file
 vecho " <html> "
 vecho " <head> "
+vecho " <meta http-equiv="refresh" content="900"> "
 vecho " </head> "
 vecho " <body> "
-vecho " <table border='1' cellspacing='1' width='70%'>"
+vecho " <table border='1' cellspacing='1' width='90%'>"
 vecho " <tr> "
-vecho " <td colspan=8> <b>Following are the list of labs and their information:</b></td> "
+vecho " <td colspan=10> <b>Following are the list of labs and their information:</b></td> "
 vecho " </tr> "
 vecho " <tr> "
-vecho " <td colspan=8> Last Full Deployment Date/Time:<b>$HTMLSPACE</b></td> "
+vecho " <td colspan=10> Last Updated:<b>`date`$HTMLSPACE</b></td> "
 vecho " </tr> "
-vecho " <tr> "
-vecho " <td colspan=8> Last Incremental Deployment Date/Time:<b>`date`$HTMLSPACE</b></td> "
-vecho " </tr> "
-vecho " <tr><td><b>Slno</b></td><td><b>LabUrl</b></td><td><b>LabIP</b></td><td><b>BasicDeployment</b></td><td><b>VersionInfo</b></td><td><b>LabDeployment</b></td><td><b>Errors</b></td><td><b>Log</b></td></tr>"
+vecho " <tr><td><b>Slno</b></td><td><b>LabUrl</b></td><td><b>LabInstitute</b></td><td><b>LabDiscipline</b></td><td><b>LabIP</b></td><td><b>BasicDeployment</b></td><td><b>VersionInfo</b></td><td><b>LabDeployment</b></td><td><b>Errors</b></td><td><b>Log</b></td></tr>"
 
 #Echo dynamic stuff based on the list of containers
 IFS=$'\n'
@@ -53,6 +51,10 @@ do
  vhostip=`echo $vhost | cut -d' ' -f1`
  vhostname=`echo $vhost | cut -d' ' -f2`
  vhost=`echo $vhostname | cut -d'.' -f1`
+ 
+ vinfo=`grep ^VINFO $LOGDIR/$vhost.log | cut -d':' -f2 | sed 's/^ //'`
+ vlabinstitute=`echo $vinfo | cut -d'#' -f4 | cut -d'=' -f2`
+ vlabdisc=`echo $vinfo | cut -d'#' -f5 | cut -d'=' -f2` 
 
  vdeployerrors=`grep VERROR $LOGDIR/$vhost.log | wc -l`
  vdeploystat=`grep ^VDEPLOY $LOGDIR/$vhost.log | cut -d':' -f2 | sed 's/^ //'`
@@ -86,7 +88,7 @@ do
 
  if [ "$vhostname" != "" ] && [ "$vhostip" != "" ] ; then
     vecho "<tr>"
-    vecho "<td>$count$HTMLSPACE</td><td><a href="$vhostname/" target="_new">$vhostname$HTMLSPACE</a></td><td>$vhostip$HTMLSPACE</td><td><img src="$vtestimg" width="18" height="18">$vteststat$HTMLSPACE</td><td><a href="$vhostname/$DEPLOYVERFILE">View$HTMLSPACE</a></td><td><img src="$vdeployimg" width="18" height="18">$vdeploystat$HTMLSPACE</td><td bgcolor="$vdeploystatcolor">$vdeployerrors$HTMLSPACE</td><td><a href="$LOGDIR/$vhost.log" target="_new">View$HTMLSPACE</a></td>"
+    vecho "<td>$count$HTMLSPACE</td><td><a href="$vhostname/" target="_new">$vhostname$HTMLSPACE</a></td><td>$vlabinstitute$HTMLSPACE</td><td>$vlabdisc$HTMLSPACE</td><td>$vhostip$HTMLSPACE</td><td><img src="$vtestimg" width="18" height="18">$vteststat$HTMLSPACE</td><td><a href="$vhostname/$DEPLOYVERFILE">View$HTMLSPACE</a></td><td><img src="$vdeployimg" width="18" height="18">$vdeploystat$HTMLSPACE</td><td><font color="$vdeploystatcolor">$vdeployerrors$HTMLSPACE</font></td><td><a href="$LOGDIR/$vhost.log" target="_new">View$HTMLSPACE</a></td>"
     vecho "</tr>"
     count=`expr $count + 1`
  fi
