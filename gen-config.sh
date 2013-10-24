@@ -20,7 +20,7 @@ DEPLOYVERFILE="vlabs-version.txt"
 DEPLOYHOSTALIAS="emcee.virtual-labs.ac.in"
 RSAKEY="id_svnadmin_rsa"
 SLEEPSECS="10"
-SETPROXY="export http_proxy='http://proxy.iiit.ac.in:8080';"
+SETPROXY="export http_proxy='http://proxy.virtual-labs.ac.in:8080';"
 ##########################################
 
 ###############DEFAULTS###################
