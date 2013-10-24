@@ -73,6 +73,7 @@ execute_cmds()
        EXITSTATUS=$?
        if [ "$EXITSTATUS" != 0 ] ; then
          echo "VERROR: Error occured. Unable to continue" >> $LOGFILE.log
+	 errflag=1
        fi # End of command exit status check
     fi  # End of error flag check
    fi # End of previous error check
