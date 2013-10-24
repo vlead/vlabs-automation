@@ -43,7 +43,7 @@ vecho " </tr> "
 vecho " <tr> "
 vecho " <td colspan=8> Last Incremental Deployment Date/Time:<b>`date`$HTMLSPACE</b></td> "
 vecho " </tr> "
-vecho " <tr><td><b>Slno</b></td><td><b>Labid</b></td><td><b>LabIP</b></td><td><b>Deployment</b></td><td><b>Errors</b></td><td><b>VerInfo</b></td><td><b>Log</b></td><td><b>Testing</b></td></tr>"
+vecho " <tr><td><b>Slno</b></td><td><b>LabUrl</b></td><td><b>LabIP</b></td><td><b>BasicDeployment</b></td><td><b>VersionInfo</b></td><td><b>LabDeployment</b></td><td><b>Errors</b></td><td><b>Log</b></td></tr>"
 
 #Echo dynamic stuff based on the list of containers
 IFS=$'\n'
@@ -53,26 +53,40 @@ do
  vhostip=`echo $vhost | cut -d' ' -f1`
  vhostname=`echo $vhost | cut -d' ' -f2`
  vhost=`echo $vhostname | cut -d'.' -f1`
+
  vdeployerrors=`grep VERROR $LOGDIR/$vhost.log | wc -l`
- if [ "$vdeployerrors" == "0" ] ; then
+ vdeploystat=`grep ^VDEPLOY $LOGDIR/$vhost.log | cut -d':' -f2 | sed 's/^ //'`
+ if [ "$vdeploystat" == "Success" ] ; then
    vdeploystat="Success"
    vdeploystatcolor="#00FF00"
- else
+   vdeployimg="success.jpg"
+ elif [ "$vdeploystat" == "Failure" ] || [ "$vdeployerrors" != "0" ] ; then
    vdeploystat="Failure"
    vdeploystatcolor="#FF0000"
+   vdeployimg="failure.png"
+ else
+   vdeploystat="Unknown"
+   vdeploystatcolor="#0000FF"
+   vdeployimg="progress.gif"
  fi
 
  vteststat=`grep ^VTEST $LOGDIR/$vhost.log | cut -d':' -f2 | sed 's/^ //'`
  if [ "$vteststat" == "Success" ] ; then
    vteststatcolor="#00FF00"
- else
+   vtestimg="success.jpg"
+ elif [ "$vteststat" == "Failure" ] ; then
    vteststat="Failure"
    vteststatcolor="#FF0000"
+   vtestimg="failure.png"
+ else 
+   vteststat="Unknown"
+   vteststatcolor="#0000FF"
+   vtestimg="progress.gif"
  fi
 
  if [ "$vhostname" != "" ] && [ "$vhostip" != "" ] ; then
     vecho "<tr>"
-    vecho "<td>$count$HTMLSPACE</td><td><a href="$vhostname/">$vhostname$HTMLSPACE</a></td><td>$vhostip$HTMLSPACE</td><td bgcolor="$vdeploystatcolor">$vdeploystat$HTMLSPACE</td><td bgcolor="$vdeploystatcolor">$vdeployerrors$HTMLSPACE</td><td><a href="$LOGDIR/$vhost.log">View log$HTMLSPACE</a></td><td><a href="$vhostname/$DEPLOYVERFILE">View VerInfo$HTMLSPACE</a></td><td bgcolor="$vteststatcolor">$vteststat$HTMLSPACE</td>"
+    vecho "<td>$count$HTMLSPACE</td><td><a href="$vhostname/" target="_new">$vhostname$HTMLSPACE</a></td><td>$vhostip$HTMLSPACE</td><td><img src="$vtestimg" width="18" height="18">$vteststat$HTMLSPACE</td><td><a href="$vhostname/$DEPLOYVERFILE">View$HTMLSPACE</a></td><td><img src="$vdeployimg" width="18" height="18">$vdeploystat$HTMLSPACE</td><td bgcolor="$vdeploystatcolor">$vdeployerrors$HTMLSPACE</td><td><a href="$LOGDIR/$vhost.log" target="_new">View$HTMLSPACE</a></td>"
     vecho "</tr>"
     count=`expr $count + 1`
  fi

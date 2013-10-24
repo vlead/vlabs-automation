@@ -40,4 +40,4 @@ eerc03 0 Civil svn CEVL2 ubuntu-12.04-x86_64 % % apache2
 eerc04 0 Civil svn CEVL3 ubuntu-12.04-x86_64 % % apache2
 eerc05 0 Civil svn MEVL ubuntu-12.04-x86_64 % % apache2
 eerc06 0 Civil svn CEVL6 ubuntu-12.04-x86_64 % % apache2
-phy14 1 Physical-Sciences git physc ubuntu-12.04-x86_64 4G % apache2
+phy14 0 Physical-Sciences git physc ubuntu-12.04-x86_64 4G % apache2

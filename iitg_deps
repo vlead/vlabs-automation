@@ -2,9 +2,9 @@ labid modflag labdisc repotype reponame ostemplate diskspace ram deps1 deps2 dep
 cse31 0 Computer-Science
 ece01 0 Electronics bzr ece01
 ece05 0 Electronics bzr vlsi_vlab
-ece10 0 Electronics bzr ece10
+ece10 1 Electronics bzr ece10
 ece11 0 Electronics bzr ece11
-eee02 0 Electrical bzr eee02
+eee02 1 Electrical bzr eee02 % % 512M
 eee03 0 Electrical bzr eee03
 hss01 0 Humanities bzr hss01
 hss02 0 Humanities bzr hss02

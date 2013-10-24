@@ -12,6 +12,7 @@ IPPREFIX="10.4.13."
 REPOUSER="svnadmin"
 REPOPASS="adminsvn"
 REPOHOST="svn.virtual-labs.ac.in"
+REPOURL="bzr+ssh://svnadmin@bzr.virtual-labs.ac.in/labs/labxxx/bzr/labrepo/trunk"
 BUILDUSER="root"
 BUILDDIR="~$BUILDUSER"
 DEPLOYDIR="/var/www/html"
@@ -26,6 +27,7 @@ SETPROXY="export http_proxy='http://proxy.iiit.ac.in:8080';"
 OSTEMPLATE=centos-6-x86_64 # Default Template
 NAMESERVER=10.4.12.157
 DISKSPACE=3G
+DISKINODES=400000
 RAM=256M
 HOSTNAME=labxxx
 IPADD=10.10.10.10
@@ -166,7 +168,7 @@ for line in $(cat *_deps | sort -u);
      ctid=$($VZLIST -H -a -o ctid -h $vhost.$DOMAIN | sed 's/^[ \t]*//g')
      echo "echo \"###HOST=$labhost##CTID=$ctid###\"" >> $CONFIG
      echo "echo \"\`date\`\"" >> $CONFIG
-     echo "$VZCTL set $ctid --diskspace $diskspace --ram $ram --nameserver $NAMESERVER --save" >> $CONFIG
+     echo "$VZCTL set $ctid --diskspace $diskspace --ram $ram --nameserver $NAMESERVER --diskinodes $DISKINODES --save" >> $CONFIG
      COUNT=`expr $COUNT + 1`
    fi
    vhost_list=$(echo $vhost_list | cut -d' ' -f2-400)
@@ -269,28 +271,32 @@ for line in $(cat *_deps | sort -u);
        BZREXTRA=""
        OPER="checkout"
     fi
+    
+    # Construct Repository Url
+    REPOURL=$repotype+ssh://$REPOUSER@$REPOHOST/labs/$labid/$repotype/$reponame$BZREXTRA
 
     # Delete and check-out the repository
     echo "$VZCTL $VZEXECCMD $ctid \"rm -rf $BUILDDIR/$labid\" " >> $CONFIG 
-    echo "$VZCTL $VZEXECCMD $ctid \"$repotype $OPER $repotype+ssh://$REPOUSER@$REPOHOST/labs/$labid/$repotype/$reponame$BZREXTRA $BUILDDIR/$labid\" " >> $CONFIG 
+    echo "$VZCTL $VZEXECCMD $ctid \"$repotype $OPER $REPOURL $BUILDDIR/$labid\" " >> $CONFIG 
 
     # Run the make-file to build and deploy the lab
     echo "$VZCTL $VZEXECCMD $ctid \"cd $BUILDDIR/$labid/src; make\" " >> $CONFIG
     echo "$VZCTL $VZEXECCMD $ctid \"rm -rf $DEPLOYDIR/* \" " >> $CONFIG
     echo "$VZCTL $VZEXECCMD $ctid \"rsync -avz $BUILDDIR/$labid/build/ $DEPLOYDIR \" " >> $CONFIG
     echo "$VZCTL $VZEXECCMD $ctid \"echo \\\"**************************************************\\\" > $DEPLOYDIR/$DEPLOYVERFILE\" " >> $CONFIG
-    echo "$VZCTL $VZEXECCMD $ctid \"echo $'\t'Deployed Date: \"\`date\`\"$'\n'$'\t'Labid: $labid$'\n'$'\t'Repotype: $repotype >> $DEPLOYDIR/$DEPLOYVERFILE\" " >> $CONFIG
+    echo "$VZCTL $VZEXECCMD $ctid \"echo $'\t'Deployed Date: \"\`date\`\"$'\n'$'\t'Labid: $labid >> $DEPLOYDIR/$DEPLOYVERFILE\" " >> $CONFIG
     echo "$VZCTL $VZEXECCMD $ctid \"echo $'\t'LabDiscipline: $labdisc$'\n'$'\t'ContainerID: $ctid$'\n'$'\t'LocalIP: $IPPREFIX$ctid >> $DEPLOYDIR/$DEPLOYVERFILE\" " >> $CONFIG
     echo "$VZCTL $VZEXECCMD $ctid \"echo $'\t'Domain: $DOMAIN$'\n'$'\t'Environment: $ENV$'\n'$'\t'Modflag: $modflag >> $DEPLOYDIR/$DEPLOYVERFILE\" " >> $CONFIG
-    echo "$VZCTL $VZEXECCMD $ctid \"echo $'\t'RepoName: $reponame$'\n'$'\t'OSTemplate: $ostemplate$'\n'$'\t'Diskspace: $diskspace >> $DEPLOYDIR/$DEPLOYVERFILE\" " >> $CONFIG
-    echo "$VZCTL $VZEXECCMD $ctid \"echo $'\t'RAM: $ram$'\n'$'\t'Package Dependencies: $deps$'\n'$'\t'Services: $servs$'\n'$'\t'DeployLocation: $DEPLOYDIR >> $DEPLOYDIR/$DEPLOYVERFILE\" " >> $CONFIG
+    echo "$VZCTL $VZEXECCMD $ctid \"echo $'\t'OSTemplate: $ostemplate$'\n'$'\t'Diskspace: $diskspace$'\n'$'\t'Diskinodes: $DISKINODES$'\n'$'\t'RAM: $ram >> $DEPLOYDIR/$DEPLOYVERFILE\" " >> $CONFIG
+    echo "$VZCTL $VZEXECCMD $ctid \"echo $'\t'RepoUser: $REPOUSER$'\n'$'\t'Repotype: $repotype$'\n'$'\t'RepoHost: $REPOHOST$'\n'$'\t'RepoName: $reponame$'\n'$'\t'RepoUrl: $REPOURL >> $DEPLOYDIR/$DEPLOYVERFILE\" " >> $CONFIG
+    echo "$VZCTL $VZEXECCMD $ctid \"echo $'\t'Package Dependencies: $deps$'\n'$'\t'Services: $servs$'\n'$'\t'BuildUser: $BUILDUSER$'\n'$'\t'BuildDir: $BUILDDIR$'\n'$'\t'DeployLocation: $DEPLOYDIR >> $DEPLOYDIR/$DEPLOYVERFILE\" " >> $CONFIG
 
-    # Simple Automatic testing
+    # Simple Automatic test
     # Echo a random text into the version file and then access it using wget and verify the content is same
     echo "randomtext=\`echo \"\\\`date\\\`\" | md5sum | sed 's/[ \t]*//g'\`" >> $CONFIG
-    echo "$VZCTL $VZEXECCMD $ctid \"echo  $'\t'Randomtext: \"\$randomtext\" >> $DEPLOYDIR/$DEPLOYVERFILE\" " >> $CONFIG
+    echo "$VZCTL $VZEXECCMD $ctid \"echo  $'\t'Idtext: \"\$randomtext\" >> $DEPLOYDIR/$DEPLOYVERFILE\" " >> $CONFIG
     echo "wget --no-proxy $IPPREFIX$ctid/$DEPLOYVERFILE -O $DEPLOYVERFILE" >> $CONFIG
-    echo "if [ \"\$randomtext\" == \"\`grep Randomtext $DEPLOYVERFILE | cut -d':' -f2 | sed 's/^[ \t]*//g'\`\" ] ; then \
+    echo "if [ \"\$randomtext\" == \"\`grep Idtext $DEPLOYVERFILE | cut -d':' -f2 | sed 's/^[ \t]*//g'\`\" ] ; then \
     echo \"VTEST: Success\"; else echo \"VTEST: Failure\"; fi" >> $CONFIG
     echo "$VZCTL $VZEXECCMD $ctid \"echo \\\"**************************************************\\\" >> $DEPLOYDIR/$DEPLOYVERFILE\" " >> $CONFIG
 

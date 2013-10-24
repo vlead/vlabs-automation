@@ -20,7 +20,7 @@ esac
 
 sctid=`echo $2 | cut -d'-' -f1`
 ectid=`echo $2 | cut -d'-' -f2`
-while [ "$sctid" \< "$ectid" ] ; do
+while [ $sctid \< $ectid ] ; do
  echo $sctid
  vzctl $OPER1 $sctid
  if [ "$OPER2" != "" ] ; then
