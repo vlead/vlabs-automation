@@ -103,6 +103,9 @@ for line in $(cat *_deps | sort -u);
   deps=`echo $line | cut -d' ' -f9-18 | sed 's/'$DEFAULT'//g'` 
   servs=`echo $line | cut -d' ' -f19-28 | sed 's/'$DEFAULT'//g'`
 
+  # Figure out labinstitute the harder way - cant help it
+  labinstitute=`grep -l $labid *deps | cut -d'_' -f1`
+
   # Ignore if header or commented config
   if [ "$labid" == "labid" ] || [ "$labid" == "#*" ] ; then
    continue
@@ -166,7 +169,7 @@ for line in $(cat *_deps | sort -u);
    if [ "$modflag" == "1" ]; then 
      echo "########$labhost-start############" >> $CONFIG
      ctid=$($VZLIST -H -a -o ctid -h $vhost.$DOMAIN | sed 's/^[ \t]*//g')
-     echo "echo \"###HOST=$labhost##CTID=$ctid###\"" >> $CONFIG
+     echo "echo \"VINFO: #HOST=$labhost#CTID=$ctid#LABINST=$labinstitute#LABDISC=$labdisc#IP=$IPPREFIX$ctid#OS=$ostemplate#\"" >> $CONFIG
      echo "echo \"\`date\`\"" >> $CONFIG
      echo "$VZCTL set $ctid --diskspace $diskspace --ram $ram --nameserver $NAMESERVER --diskinodes $DISKINODES --save" >> $CONFIG
      COUNT=`expr $COUNT + 1`
@@ -186,7 +189,7 @@ for line in $(cat *_deps | sort -u);
     # Force modflag=1
     modflag=1
     echo "########$labhost-start############" >> $CONFIG
-    echo "echo \"###HOST=$labhost##CTID=$ctid##IP=$IPPREFIX$ctid##OS=$ostemplate###\"" >> $CONFIG
+    echo "echo \"VINFO: #HOST=$labhost#CTID=$ctid#LABINST=$labinstitute#LABDISC=$labdisc#IP=$IPPREFIX$ctid#OS=$ostemplate#\"" >> $CONFIG
     echo "echo \"\`date\`\"" >> $CONFIG
     # Strip the ctid we used 
     vid_list_available=$(echo $vid_list_available | cut -d' ' -f2-400)
@@ -285,7 +288,7 @@ for line in $(cat *_deps | sort -u);
     echo "$VZCTL $VZEXECCMD $ctid \"rsync -avz $BUILDDIR/$labid/build/ $DEPLOYDIR \" " >> $CONFIG
     echo "$VZCTL $VZEXECCMD $ctid \"echo \\\"**************************************************\\\" > $DEPLOYDIR/$DEPLOYVERFILE\" " >> $CONFIG
     echo "$VZCTL $VZEXECCMD $ctid \"echo $'\t'Deployed Date: \"\`date\`\"$'\n'$'\t'Labid: $labid >> $DEPLOYDIR/$DEPLOYVERFILE\" " >> $CONFIG
-    echo "$VZCTL $VZEXECCMD $ctid \"echo $'\t'LabDiscipline: $labdisc$'\n'$'\t'ContainerID: $ctid$'\n'$'\t'LocalIP: $IPPREFIX$ctid >> $DEPLOYDIR/$DEPLOYVERFILE\" " >> $CONFIG
+    echo "$VZCTL $VZEXECCMD $ctid \"echo $'\t'LabInstitute: $labinstitute$'\n'$'\t'LabDiscipline: $labdisc$'\n'$'\t'ContainerID: $ctid$'\n'$'\t'LocalIP: $IPPREFIX$ctid >> $DEPLOYDIR/$DEPLOYVERFILE\" " >> $CONFIG
     echo "$VZCTL $VZEXECCMD $ctid \"echo $'\t'Domain: $DOMAIN$'\n'$'\t'Environment: $ENV$'\n'$'\t'Modflag: $modflag >> $DEPLOYDIR/$DEPLOYVERFILE\" " >> $CONFIG
     echo "$VZCTL $VZEXECCMD $ctid \"echo $'\t'OSTemplate: $ostemplate$'\n'$'\t'Diskspace: $diskspace$'\n'$'\t'Diskinodes: $DISKINODES$'\n'$'\t'RAM: $ram >> $DEPLOYDIR/$DEPLOYVERFILE\" " >> $CONFIG
     echo "$VZCTL $VZEXECCMD $ctid \"echo $'\t'RepoUser: $REPOUSER$'\n'$'\t'Repotype: $repotype$'\n'$'\t'RepoHost: $REPOHOST$'\n'$'\t'RepoName: $reponame$'\n'$'\t'RepoUrl: $REPOURL >> $DEPLOYDIR/$DEPLOYVERFILE\" " >> $CONFIG
