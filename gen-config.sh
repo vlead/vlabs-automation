@@ -195,7 +195,7 @@ for line in $(cat *_deps | sort -u);
     vid_list_available=$(echo $vid_list_available | cut -d' ' -f2-400)
     
     # Create commands for VM creation
-    echo "$VZCTL create $ctid --ostemplate $ostemplate --hostname $labhost.$DOMAIN --ipadd $IPPREFIX$ctid --diskspace $diskspace" >> $CONFIG
+    echo "$VZCTL create $ctid --ostemplate $ostemplate --hostname $labhost.$DOMAIN --ipadd $IPPREFIX$ctid --diskspace $diskspace --diskinodes $DISKINODES" >> $CONFIG
     echo "$VZCTL start $ctid" >> $CONFIG
     echo "$VZCTL set $ctid --nameserver $NAMESERVER --ram $ram --save" >> $CONFIG
     # Disable strict host checking and add keys for $REPOHOST
