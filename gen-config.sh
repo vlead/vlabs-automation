@@ -195,9 +195,9 @@ for line in $(cat *_deps | sort -u);
     vid_list_available=$(echo $vid_list_available | cut -d' ' -f2-400)
     
     # Create commands for VM creation
-    echo "$VZCTL create $ctid --ostemplate $ostemplate --hostname $labhost.$DOMAIN --ipadd $IPPREFIX$ctid --diskspace $diskspace --diskinodes $DISKINODES" >> $CONFIG
+    echo "$VZCTL create $ctid --ostemplate $ostemplate --hostname $labhost.$DOMAIN --ipadd $IPPREFIX$ctid --diskspace $diskspace" >> $CONFIG
     echo "$VZCTL start $ctid" >> $CONFIG
-    echo "$VZCTL set $ctid --nameserver $NAMESERVER --ram $ram --save" >> $CONFIG
+    echo "$VZCTL set $ctid --nameserver $NAMESERVER --diskinodes $DISKINODES --ram $ram --save" >> $CONFIG
     # Disable strict host checking and add keys for $REPOHOST
     echo "$VZCTL $VZEXECCMD $ctid \"mkdir -p ~$BUILDUSER/.ssh\" " >> $CONFIG
     echo "$VZCTL $VZEXECCMD $ctid \"echo Host $REPOHOST $'\n'$'\t' StrictHostKeyChecking no $'\n'$'\t' IdentityFile ~$BUILDUSER/.ssh/$RSAKEY > ~$BUILDUSER/.ssh/config \" " >> $CONFIG 
