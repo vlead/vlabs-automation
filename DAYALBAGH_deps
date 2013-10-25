@@ -1,0 +1,7 @@
+labid modflag labdisc repotype reponame ostemplate diskspace ram deps1 deps2 deps3 deps4 deps5 deps6 deps7 deps8 deps9 deps10 serv1 serv2 serv3 serv4 serv5 serv6 serv7 serv8 serv9 serv10
+chs12 0 Chemical-Science bzr chs12 % % % httpd % % % % % % % % % httpd
+chs14 0 Chemical-Science bzr chs14 % % % httpd % % % % % % % % % httpd
+ece26 0 Electronics svn vlab-test % % % httpd % % % % % % % % % httpd
+eee06 0 Electrical bzr eee06 % % % httpd % % % % % % % % % httpd
+mech26 0 Mechanical bzr mech026 % % % httpd % % % % % % % % % httpd
+phy12 0 Physical-Sciences bzr phy12 % % % httpd % % % % % % % % % httpd

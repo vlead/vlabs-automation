@@ -1,0 +1,11 @@
+labid modflag labdisc repotype reponame ostemplate diskspace ram deps1 deps2 deps3 deps4 deps5 deps6 deps7 deps8 deps9 deps10 serv1 serv2 serv3 serv4 serv5 serv6 serv7 serv8 serv9 serv10
+cse12 0 Computer-Science bzr FPGA-repo centos-6-x86_64 3G % httpd % % % % % % % % % httpd 
+ece19 0 Computer-Science bzr hybrid-elec-repo centos-6-x86_64 1G 128M httpd % % % % % % % % % httpd
+eee05 0 Electrical bzr SMS-repo centos-6-x86_64 % % httpd % % % % % % % % % httpd
+eee09 0 Electrical bzr IAL-repo centos-6-x86_64 % % httpd % % % % % % % % % httpd
+eee10 0 Electrical bzr electrical-machines centos-6-x86_64 % % httpd % % % % % % % % % httpd
+eee12 0 Electrical bzr PLC centos-6-x86_64 % % httpd % % % % % % % % % httpd
+mech04 0 Mechanical bzr vibration centos-6-x86_64 % % httpd % % % % % % % % % httpd
+mech17 0 Mechanical bzr micromachining centos-6-x86_64 % % httpd % % % % % % % % % httpd
+mech18 0 Mechanical bzr fab centos-6-x86_64 % % httpd % % % % % % % % % httpd
+bio16 0 Biotechnology bzr BSPL-repo centos-6-x86_64 % % httpd % % % % % % % % % httpd
