@@ -1,21 +1,21 @@
 labid modflag labdisc repotype reponame ostemplate diskspace ram deps1 deps2 deps3 deps4 deps5 deps6 deps7 deps8 deps9 deps10 serv1 serv2 serv3 serv4 serv5 serv6 serv7 serv8 serv9 serv10
-ece03 0 Electronics bzr ece03
-ece18 0 Electronics bzr ece18
-ece30 0 Electronics
-civil08 0 Civil
-mech06 0 Mechanical
-mech08 0 Mechanical svn vlkb_svn
-mech10 0 Mechanical bzr mech10
-mech14 0 Mechanical
-mech15 0 Mechanical
-mech16 0 Mechanical
-mech20 0 Mechanical
-mech29 0 Mechanical
-mech30 0 Mechanical
-phy01 0 Physical-Sciences bzr phy01
-phy15 0 Physical-Sciences
-phy16 0 Physical-Sciences
-phy19 0 Physical-Sciences bzr phy19
-chs13 0 Chemical-Science bzr chs13
-aero01 0 Aerospace bzr ae01
-aero02 0 Aerospace
+ece03 0 Electronics bzr ece03 % % % httpd % % % % % % % % % httpd
+ece18 0 Electronics bzr ece18 % % % httpd % % % % % % % % % httpd
+ece30 0 Electronics % % % % % httpd % % % % % % % % % httpd
+civil08 0 Civil % % % % % httpd % % % % % % % % % httpd
+mech06 0 Mechanical % % % % % httpd % % % % % % % % % httpd
+mech08 0 Mechanical svn vlkb_svn % % % httpd % % % % % % % % % httpd
+mech10 0 Mechanical bzr mech10 % % % httpd % % % % % % % % % httpd
+mech14 0 Mechanical % % % % % httpd % % % % % % % % % httpd
+mech15 0 Mechanical % % % % % httpd % % % % % % % % % httpd
+mech16 0 Mechanical % % % % % httpd % % % % % % % % % httpd
+mech20 0 Mechanical % % % % % httpd % % % % % % % % % httpd
+mech29 0 Mechanical % % % % % httpd % % % % % % % % % httpd
+mech30 0 Mechanical % % % % % httpd % % % % % % % % % httpd
+phy01 0 Physical-Sciences bzr phy01 % % % httpd % % % % % % % % % httpd
+phy15 0 Physical-Sciences % % % % % httpd % % % % % % % % % httpd
+phy16 0 Physical-Sciences % % % % % httpd % % % % % % % % % httpd
+phy19 0 Physical-Sciences bzr phy19 % % % httpd % % % % % % % % % httpd
+chs13 0 Chemical-Science bzr chs13 % % % httpd % % % % % % % % % httpd
+aero01 0 Aerospace bzr ae01 % % % httpd % % % % % % % % % httpd
+aero02 0 Aerospace % % % % % httpd % % % % % % % % % httpd
