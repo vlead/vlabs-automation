@@ -1,6 +1,0 @@
-labid modflag labdisc repotype reponame ostemplate diskspace ram deps1 deps2 deps3 deps4 deps5 deps6 deps7 deps8 deps9 deps10 serv1 serv2 serv3 serv4 serv5 serv6 serv7 serv8 serv9 serv10
-eee23 0 Electrical bzr eee23 ubuntu-11.04-x86_64 % % apache2 
-eee24 0 Electrical bzr eee24 % % % apache2
-civil15 0 Civil bzr civil15 ubuntu-11.04-x86_64 % % apache2
-ece23 0 Electronics bzr ece23 % % % apache2
-eee01 0 Electrical bzr eee01 ubuntu-11.04-x86_64 % % apache2
