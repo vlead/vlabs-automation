@@ -257,7 +257,7 @@ for line in $(cat *_deps | sort -u);
     # Install and enable services 
     for serv in $servs ; 
     do
-      echo "$VZCTL $VZEXECCMD $ctid \"$SRVMGR $SRVADD $serv\" " >> $CONFIG
+ #     echo "$VZCTL $VZEXECCMD $ctid \"$SRVMGR $SRVADD $serv\" " >> $CONFIG
       echo "$VZCTL $VZEXECCMD $ctid \"$SRVMGR $serv $SRVENABLE\" " >> $CONFIG
     done
     IFS=$oldifs
