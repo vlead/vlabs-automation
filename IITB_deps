@@ -6,6 +6,6 @@ mech31 0 Mechanical % % % % % httpd % % % % % % % % % httpd
 che06 0 Chemical-Science % % % % % httpd % % % % % % % % % httpd
 bio14 0 Biotechnology % % % % % httpd % % % % % % % % % httpd
 civil09 0 Civil git trafficengg % % % httpd % % % % % % % % % httpd
-civil11 0 Civil git repo % % % httpd % % % % % % % % % httpd
-civil13 0 Civil git utspvleadrepo % % % httpd % % % % % % % % % httpd
+civil11 0 Civil git repo % 6G % httpd % % % % % % % % % httpd
+civil13 0 Civil git utspvleadrepo % 4G % httpd % % % % % % % % % httpd
 sc01 0 Chemical-Science git cmlsrepo % % % httpd % % % % % % % % % httpd

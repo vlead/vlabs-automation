@@ -52,4 +52,4 @@ done
 vecho "</virtualHost>"
 
 # Restart Apache
-service httpd restart
+#service httpd restart

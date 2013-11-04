@@ -1,0 +1,54 @@
+Relationship:
+
+[ LAB MANAGER ] *----------* [ VM MANAGER ] ---------* [ VM ]
+
+Interface Calls:
+   These are calls made by the lab-manager to the vm-manager. They are implemented
+at the vm-manager
+ 
+ BasicOperations:
+ 
+  LabOperations:
+   requestinstance(labinfo)  
+      - Create VM request with labinfo parameters ( OS,RAM,Diskusage, 
+   updateinstance(deps, srvs) 
+      - Configures the VM with required dependencies and services
+   deleteinstance()
+      - Deletes the VM and instructs VMManager to update the resource pool
+
+ ValueAddedOperations:
+
+  Backup:
+   backupinstance()
+      - Takes a snapshot of the VM and stores it at some predefined location 
+   restoreinstance(snapshot-id, ctid)
+      - Restores a particular snapshot of the VM based on user-input
+   getsnapshotlist()
+      - List available backups based on date/time
+
+  VMStats:  
+   getstats()
+      - Get run-time statistics of the VM 
+
+  LabStats:      
+   getlabusage()
+      - Gets run-time usage statistics of the lab
+
+
+Internal Functions defined at VMManager:
+ 
+   create()
+      - Creates a VM based on available resources and lab-parameters
+   configure()
+      - Installs the dependencies and services on the vm based on lab version and
+        makes it ready for the lab
+   labcheckout()
+      - Checks out the proper version of the lab based on standard specifications
+   labbuild()
+      - Builds the lab based on standard specifications 
+   labrelease()
+      - Standard release of the lab to make it available
+   getresourceinfo()
+      - Gets standard resource information like ( available/used memory, available/used ctids )  
+   delete()
+      - Delete a VM

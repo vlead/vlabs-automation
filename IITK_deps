@@ -15,7 +15,7 @@ mech30 0 Mechanical % % % % % httpd % % % % % % % % % httpd
 phy01 0 Physical-Sciences bzr phy01 % % % httpd % % % % % % % % % httpd
 phy15 0 Physical-Sciences % % % % % httpd % % % % % % % % % httpd
 phy16 0 Physical-Sciences % % % % % httpd % % % % % % % % % httpd
-phy19 0 Physical-Sciences bzr phy19 % % % httpd % % % % % % % % % httpd
+phy19 0 Physical-Sciences bzr phy19 % % 800M httpd % % % % % % % % % httpd
 chs13 0 Chemical-Science bzr chs13 % % % httpd % % % % % % % % % httpd
-aero01 0 Aerospace bzr ae01 % % % httpd % % % % % % % % % httpd
+ae01 0 Aerospace bzr aero % % % httpd % % % % % % % % % httpd
 aero02 0 Aerospace % % % % % httpd % % % % % % % % % httpd

@@ -33,7 +33,7 @@ cse28 0 Computer-Science bzr test2 ubuntu-12.04-x86_64 % % apache2 % % % % % % %
 cse29 0 Computer-Science bzr newui ubuntu-12.04-x86_64 % % apache2 php5 % % % % % % % % apache2
 cse30 0 Computer-Science svn test1 ubuntu-12.04-x86_64 % % apache2 % % % % % % % % % apache2
 ece06 0 Electronics svn dspVlab ubuntu-12.04-x86_64 % % apache2 % % % % % % % % % apache2
-emt 0 svn Electromagmetic emt_new ubuntu-12.04-x86_64 % % apache2 % % % % % % % % % apache2
+emt 0 Electromagmetic svn emt_new ubuntu-12.04-x86_64 4G % apache2 % % % % % % % % % apache2
 eerc01 0 Civil svn CEVL ubuntu-12.04-x86_64 % % apache2 % % % % % % % % % apache2
 eerc02 0 Civil svn CEVL1 ubuntu-12.04-x86_64 % % apache2 % % % % % % % % % apache2
 eerc03 0 Civil svn CEVL2 ubuntu-12.04-x86_64 % % apache2 % % % % % % % % % apache2

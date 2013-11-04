@@ -1,0 +1,78 @@
+1) VMs
+   - Each VM is a linux host or a windows vm
+   - 
+  vm
+   {
+     guid:
+     labid:
+     displayName:
+     type: { test, deploy1, deploy2 }
+     os: 
+
+     runtime {
+	    hostid: <--- hosts.guid 
+	    created_time:
+	    modified_time:
+	    lastbacked_time:
+	    diskspace:
+	    memory:
+	    diskinodes: 
+	  }
+   }
+    
+
+2) Hosts
+   {
+     GUID:      
+     IPAddress:
+     Diskspace:
+     RAM:
+     VMStartIP:
+     VMEndIP:
+
+
+      
+3) Labs
+
+     lab
+       {
+         labid:
+         labdisc:
+         labinst:
+         runtime
+          {
+           repotype:
+           reponame:
+           revno:
+           repouser:
+           repohost:
+           repourl:
+           deps {
+             deps1:
+	     deps2:
+	     deps3:
+	     deps4:
+	     .
+	     .
+	     .	
+	     deps10:
+           }
+           servs {
+	     srv1:
+	     srv2:
+	     srv3:
+	     .
+	     .
+	     .
+             .
+             srv10: 	     
+           }
+                  
+       }
+
+3) Database
+    {
+      
+
+4) External Users
+5) Administrator

@@ -4,11 +4,11 @@ ece01 0 Electronics bzr ece01 % % % httpd % % % % % % % % % httpd
 ece05 0 Electronics bzr vlsi_vlab % % % httpd % % % % % % % % % httpd
 ece10 0 Electronics bzr ece10 % % % httpd % % % % % % % % % httpd
 ece11 0 Electronics bzr ece11 % % % httpd % % % % % % % % % httpd
-eee02 0 Electrical bzr eee02 % % 512M httpd % % % % % % % % % httpd
+eee02 0 Electrical bzr eee02 % % 800M httpd % % % % % % % % % httpd
 eee03 0 Electrical bzr eee03 % % % httpd % % % % % % % % % httpd
 hss01 0 Humanities bzr hss01 % % % httpd % % % % % % % % % httpd
 hss02 0 Humanities bzr hss02 % % % httpd % % % % % % % % % httpd
 hss03 0 Humanities bzr hss03 % % % httpd % % % % % % % % % httpd
-hss04 0 Humanities bzr hss04 % % % httpd % % % % % % % % % httpd
+hss04 0 Humanities bzr hss04 % 6G % httpd % % % % % % % % % httpd
 mech01 0 Mechanical bzr mech01 % % % httpd % % % % % % % % % httpd
 mech34 0 Mechanical bzr mech34 % % % httpd % % % % % % % % % httpd

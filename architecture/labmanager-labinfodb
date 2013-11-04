@@ -1,0 +1,10 @@
+Relationship:
+   
+   [ LABMANAGER ] *------------- [ LABINFODB ]
+
+Functions:
+
+  getlabinfo()
+  
+  updatelabstats()
+  
