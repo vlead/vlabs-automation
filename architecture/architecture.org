@@ -45,7 +45,11 @@
 ** Overview  
    Below is an overview of the overall system
    describing all the actors, entities and their interfaces:
-   [[ ./overview.jpg ]]
+
+#+CAPTION: Architecture
+#+ATTR_LaTeX: width=16cm
+   [[./architecture.jpg ][Architecture]]
+
 ** Actors
 *** Lab Developer
    An person who has agreed to use the services of VLEAD as per the
@@ -305,7 +309,11 @@
 * Network Architecture
   Presented below is a network architecture diagram of the proposed
   solution:
+
+#+CAPTION: Network Architecture
+#+ATTR_LaTeX: width=16cm
    [[./network-infrastructure.jpg ][Network]]
+
 * Security Architecture
 
   - Firewall rules are configured at the router-interface for

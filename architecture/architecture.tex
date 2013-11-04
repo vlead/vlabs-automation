@@ -1,9 +1,13 @@
-% Created 2013-11-04 Mon 23:36
+% Created 2013-11-05 Tue 00:41
 \documentclass[11pt]{article}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage{graphicx}
 \usepackage{longtable}
+\usepackage{float}
+\usepackage{wrapfig}
+\usepackage{soul}
+\usepackage{amssymb}
 \usepackage{hyperref}
 \usepackage{svn}
 \usepackage[T1]{fontenc}
@@ -20,9 +24,9 @@
 \floatplacement{table}{H}
 \newcommand{\hilight}[1]{\colorbox{yellow}{#1}}
 
-\title{Solution Architecture Definition for ``Mirroring of Virtual-labs at IITD''}
+\title{Design Specifications for ``Hosting of Virtual-labs using the one-lab-per-vm model''}
 \author{Suraj Samal}
-\date{04 November 2013}
+\date{05 November 2013}
 
 \begin{document}
 
@@ -31,27 +35,49 @@
 \setcounter{tocdepth}{3}
 \tableofcontents
 \vspace*{1cm}
-
 \listoftables
 \listoffigures
 
-
-\$\^{}{1}\$ FOOTNOTE DEFINITION NOT FOUND: 1
-
-\section{Basic Architecture}
+\section{Introduction}
 \label{sec-1}
 
+
+   The document discusses the design of the overall architecture of
+   the hosting of virtual-labs using the one-lab-per-vm model. This is
+   as per the requirements specified in ``Minutes of the 2013-07-25 Thu
+   Expert Committee meeting evaluating VLEAD’s progress in virtual lab
+   integration'' document at \textbf{Section-4}, \textbf{Item-3}
+
+   VLEAD (Virtual Labs Engineering and Architecture Division) team was
+   setup in June 2012 as a central engineering team for integrating
+   all the virtual-labs (around 180 in number) across all disciplines
+   and institutes onto a common data-center (currently located at IIIT
+   Hyderabad). Currently(as of 2013-11-01) around 100 labs are
+   version-controlled and around 50 hosted out of IIIT data-centre.
+
+\section{Document Revision}
+\label{sec-2}
+
+\begin{description}
+\item [Current Revision] 0.1
+\item [Revision Date] 2013-11-04
+\end{description}
+\section{Basic Architecture}
+\label{sec-3}
+
 \subsection{Overview}
-\label{sec-1.1}
+\label{sec-3.1}
 
    Below is an overview of the overall system
    describing all the actors, entities and their interfaces:
-   \hyperref[sec-1.1]{ ./overview.jpg }
+
+   \href{file://../architecture.jpg }{Architecture}
+
 \subsection{Actors}
-\label{sec-1.2}
+\label{sec-3.2}
 
 \subsubsection{Lab Developer}
-\label{sec-1.2.1}
+\label{sec-3.2.1}
 
    An person who has agreed to use the services of VLEAD as per the
    \textbf{terms of association} and follows certain standard processes to
@@ -65,7 +91,7 @@
 \item View live lab-instance statistics.
 \end{itemize}
 \subsubsection{Lab Administrator}
-\label{sec-1.2.2}
+\label{sec-3.2.2}
 
    An actor who is responsible for administering all the hosted
    labs. In specific, the roles are as follows:
@@ -76,14 +102,14 @@
        vmid pools) to the labmanager and vmmanager
 \end{itemize}
 \subsubsection{Lab User}
-\label{sec-1.2.3}
+\label{sec-3.2.3}
 
    These are end-users who use the virtual-labs and its experiments
 \subsection{Entities}
-\label{sec-1.3}
+\label{sec-3.3}
 
 \subsubsection{LabDepository}
-\label{sec-1.3.1}
+\label{sec-3.3.1}
 
 
      All labs are allocated a unique-id and a lab-depository by the
@@ -167,7 +193,7 @@
 
 \end{description}
 \subsubsection{Lab}
-\label{sec-1.3.2}
+\label{sec-3.3.2}
 
 
     An instance of a lab (inactive)  which refers to a complete set of
@@ -189,7 +215,7 @@
 
 \end{description}
 \subsubsection{LabManager}
-\label{sec-1.3.3}
+\label{sec-3.3.3}
 
 
      An entity that monitors a set of hosts, accepts requests for
@@ -226,7 +252,7 @@
 
 \end{description}
 \subsubsection{Host}
-\label{sec-1.3.4}
+\label{sec-3.3.4}
 
 
      A physical host entity managed by a lab-manager and hosting a single vm-manager
@@ -261,7 +287,7 @@
 
 \end{description}
 \subsubsection{VMManager}
-\label{sec-1.3.5}
+\label{sec-3.3.5}
 
 
      An entity that is responsible for managing virtual machines(vms)
@@ -315,7 +341,7 @@
 
 \end{description}
 \subsubsection{VM}
-\label{sec-1.3.6}
+\label{sec-3.3.6}
 
 
     A VM is a running instance of a lab.
@@ -368,120 +394,199 @@
 \end{description}
 
 \end{description}
-\section{Relationships Model}
-\label{sec-2}
+\subsection{Relationships}
+\label{sec-3.4}
 
-
-\subsection{LabDepository - repository - revision}
-\label{sec-2.1}
+\subsubsection{LabDepository - repository - revision}
+\label{sec-3.4.1}
 
 
  [ Lab-Depository ] 1 -------------- *[ repo ] 1 ---------- * [ rev ]
 
-\subsection{Lab - repository - revision}
-\label{sec-2.2}
+\subsubsection{Lab - repository - revision}
+\label{sec-3.4.2}
 
 
  [ Lab ] 1 -------- 1 [ repo ] 1 ------ 1 [ rev ]
 
-\subsection{LabManager - host - vmmgr - vm - lab}
-\label{sec-2.3}
+\subsubsection{LabManager - host - vmmgr - vm - lab}
+\label{sec-3.4.3}
 
 
  [ Labmanager ] * ------- * [ host ] 1 ------ 1 [ vmmgr ] 1 ------- * [ vm ] 1-------1 [ lab ]
-\section{Workflows}
-\label{sec-3}
 
-\subsection{Lab Developer Workflows}
-\label{sec-3.1}
+\subsection{Workflows}
+\label{sec-3.5}
 
-\subsubsection{Create a Lab}
-\label{sec-3.1.1}
+\subsubsection{Lab Developer Workflows}
+\label{sec-3.5.1}
 
-\subsubsection{Update a Lab}
-\label{sec-3.1.2}
+\begin{itemize}
 
-\subsubsection{Test a Lab}
-\label{sec-3.1.3}
+\item Create a Lab\\
+\label{sec-3.5.1.1}
 
-\subsubsection{Release a Lab}
-\label{sec-3.1.4}
 
-\subsubsection{Delete a Lab}
-\label{sec-3.1.5}
+\item Update a Lab\\
+\label{sec-3.5.1.2}
 
-\subsubsection{Fetch Lab-Statistics}
-\label{sec-3.1.6}
 
-\subsection{Lab Administrator Workflows}
-\label{sec-3.2}
+\item Test a Lab\\
+\label{sec-3.5.1.3}
 
-\subsubsection{Create a Lab Repository}
-\label{sec-3.2.1}
 
-\subsubsection{Delete a Lab Repository}
-\label{sec-3.2.2}
+\item Release a Lab\\
+\label{sec-3.5.1.4}
 
-\subsubsection{Update Resource Information}
-\label{sec-3.2.3}
+
+\item Delete a Lab\\
+\label{sec-3.5.1.5}
+
+
+\item Fetch Lab-Statistics\\
+\label{sec-3.5.1.6}
+
+
+\item Create a Lab Repository\\
+\label{sec-3.6.1}
+
+
+\item Delete a Lab Repository\\
+\label{sec-3.6.2}
+
+
+\item Update Resource Information\\
+\label{sec-3.6.3}
 
 \begin{itemize}
 \item Physical Machine Resources
 \item Network Parameters
 \item VM Manager Information
 \end{itemize}
-\subsubsection{Update Lab Backup Schedule}
-\label{sec-3.2.4}
 
-\subsubsection{Take a Lab run-time snapshot}
-\label{sec-3.2.5}
+\item Update Lab Backup Schedule\\
+\label{sec-3.6.4}
 
-\subsubsection{Restore a Lab from its snapshot backup}
-\label{sec-3.2.6}
 
-\subsubsection{Deactivate a Lab}
-\label{sec-3.2.7}
+\item Take a Lab run-time snapshot\\
+\label{sec-3.6.5}
 
-\subsubsection{Monitor VM Statistics}
-\label{sec-3.2.8}
 
-\subsubsection{Modify VM Run-time Parameters}
-\label{sec-3.2.9}
+\item Restore a Lab from its snapshot backup\\
+\label{sec-3.6.6}
 
-\subsubsection{Purge a VM}
-\label{sec-3.2.10}
 
-\subsubsection{Purge VM logs}
-\label{sec-3.2.11}
+\item Deactivate a Lab\\
+\label{sec-3.6.7}
+
+
+\item Monitor VM Statistics\\
+\label{sec-3.6.8}
+
+
+\item Modify VM Run-time Parameters\\
+\label{sec-3.6.9}
+
+
+\item Purge a VM\\
+\label{sec-3.6.10}
+
+
+\item Purge VM logs\\
+\label{sec-3.6.11}
+
+\end{itemize} % ends low level
+\subsection{Lab Administrator Workflows}
+\label{sec-3.6}
 
 \subsection{User Workflows}
-\label{sec-3.3}
+\label{sec-3.7}
 
 \subsubsection{View a Lab}
-\label{sec-3.3.1}
+\label{sec-3.7.1}
 
 \subsection{Other Implicit Workflows}
-\label{sec-3.4}
+\label{sec-3.8}
 
 \subsubsection{Log Lab Information}
-\label{sec-3.4.1}
+\label{sec-3.8.1}
 
 \subsubsection{AutoPurge Lab History}
-\label{sec-3.4.2}
+\label{sec-3.8.2}
 
 
-\section{Component Model}
+\section{Components and Interfaces}
 \label{sec-4}
+
+\begin{itemize}
+\item Following are the components that need to be designed for the proposed architecture:
+\end{itemize}
+\subsection{Lab Manager}
+\label{sec-4.1}
+
+
+\begin{itemize}
+\item LabOperator
+\item LabMonitor
+\item LabLogger
+\item LabStatsCollector
+\end{itemize}
+\subsection{VM Manager}
+\label{sec-4.2}
+
+
+\begin{itemize}
+\item VMOperator
+\item VMMonitor
+\item CommandsGenerator
+\item CommandExecutor
+\item VMLogger
+\item VMStatsCollector
+\end{itemize}
+    
+\subsection{DeveloperPortal}
+\label{sec-4.3}
+
+   
+\subsection{DeploymentDashboard}
+\label{sec-4.4}
+
+
+\subsection{LabInfoDatabase}
+\label{sec-4.5}
+
+\begin{itemize}
+\item VMStats
+\end{itemize}
+\subsection{}
+
 
 \section{Network Architecture}
 \label{sec-5}
 
   Presented below is a network architecture diagram of the proposed
   solution:
+
    \href{file://../network-infrastructure.jpg }{Network}
+
 \section{Security Architecture}
 \label{sec-6}
 
+
+\begin{itemize}
+\item Firewall rules are configured at the router-interface for
+    translating public requests to private requests.
+\item Labs are accessed by users through a web-proxy that logically
+    isolates the actual lab-instances from public world. In any case,
+    the security of the web-proxy host is compromised. The web-proxy
+    can be configured for additional security and monitored for user
+    statistics. Additionally, only specific ports are enabled so that
+    the labs can be accessed over web.
+\item Labs are accessed by lab-developers using a gateway that isolates
+    the actual lab-vms from the public world. Additionally, the
+    lab-vms are proposed to be in a separate sub-network for
+    additional security.
+\end{itemize}
 \section{Performance Model}
 \label{sec-7}
 
@@ -491,7 +596,7 @@
 \section{Backup Model}
 \label{sec-9}
 
-\section{Scalablility}
+\section{Scalablility Model}
 \label{sec-10}
 
 
