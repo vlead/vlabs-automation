@@ -1,4 +1,4 @@
-#+title: Design Specifications for "Hosting of Virtual-labs using the one-lab-per-vm model"
+#+title: Design Specifications for "Hosting of Virtual-labs using the One-lab-per-VM model"
 #+author:  Suraj Samal
 #+CREATEDDATE: <2013-11-01>
 #+LASTMODIFIEDDATE: <2013-11-05>
@@ -19,7 +19,6 @@
 #+LaTeX_HEADER: \floatplacement{figure}{H}
 #+LaTeX_HEADER: \floatplacement{table}{H}
 #+LaTeX_HEADER: \newcommand{\hilight}[1]{\colorbox{yellow}{#1}}
-#+LATEX: \listoftables
 #+LATEX: \listoffigures
 
 * Introduction
@@ -39,21 +38,30 @@
 
 * Document Revision 
 
-      - Current Revision :: 0.1
-      - Revision Date :: 2013-11-04
+|------------------+------------|
+| Current Revision |        0.1 |
+|------------------+------------|
+| Revision Date    | 2013-11-04 |
+|------------------+------------|
 
 * Basic Architecture
-** Overview  
-   Below is an overview of the overall system describing all the
-   actors, entities and their interfaces:
-   [[ file:overview.jpg ]]
+
+   *Figure-1* represents a basic overview of the overall system, its
+   sub-components describing all the actors, entities and they
+   interface with each other
+
+#+CAPTION: Overview
+#+ATTR_LaTeX: width=16cm
+   [[file:overview.jpg]]
 ** Actors
 *** Lab Developer
    An person who has agreed to use the services of VLEAD as per the
    *terms of association* and follows certain standard processes to
    maintain his/her lab during its development life-cycle. In
    specific, the roles are as follows:
-     - Checkin the lab contents (sources,dependencies, scripts and other files) into a lab-depository.
+     - Checkin the lab contents (repositories containing
+       sources,dependencies,scripts and other files) into a
+       lab-depository.
      - Keep updating the lab-depository with newer revisons of lab contents.
      - Instantiate a test lab-instance for testing and debugging issues.
      - Instantiate a live lab-instance. 
@@ -66,13 +74,16 @@
      - Allocation of resources(physical machines,ip address pools,
        vmid pools) to the labmanager and vmmanager
 *** Lab User
-   These are end-users who use the virtual-labs and its experiments
+   These are end-users who use the virtual-labs and run its
+   experiments.
 ** Entities
 *** LabDepository
 
      All labs are allocated a unique-id and a lab-depository by the
      labs administrator. A lab-depository represents a collection of
-     various repositories associated with a lab.
+     various repositories associated with a lab. Each depository has a
+     *metadata* repository which is automatically regenerated when any
+     of the repositories are modified.
 
    - lab-depository - :: An *Object* describing the property of all
                     repositories of a particular lab
@@ -91,11 +102,11 @@
                            everytime the lab-developer makes a commit
                            to other repositories.
               + numrepos - :: Total number of repositories present
-              + repoid1 - :: Identification of each repositories
-              + repoid2 - 
+              + repoid1 - :: Identification of each repository
+              + repoid2 - ::
               + .
               + .
-              + repoidN - 
+              + repoidN - ::
          -  repo1 - :: A repository *object* which refers to a svn, git or bzr repository
             - repoid - :: Identification text that can be used to checkout the repository. (Eg: cse01, mech09 )
             - reponame - :: Display text (Eg: Frontend, Backend, UI etc)
@@ -112,6 +123,7 @@
                     + dep2 ::
                       .
                       .
+		      .
                     + depn ::
                - runtimedeps - :: An *object* describing a list of services to be enabled/started. Services may mean
                                 standard packages (eg. apache2) or other custom made scripts (Eg: backup)
@@ -126,6 +138,7 @@
          -  repo2 - ::
          -  .
          -  .
+	 -  .
          -  repoN - ::
 
 *** Lab
@@ -138,10 +151,10 @@
 
  - lab - ::  *Object* describing an lab 
     + labid - :: Unique id to identify the lab from others
-    + labinfo - :: *Object* describing basic properties of a lab
-    + repo - :: *Object* describing a particular repository of a lab
+    + labinfo - :: *Object* describing basic properties of a lab (described earlier)
+    + repo - :: *Object* describing a particular repository of a lab (described earlier)
     + rev - :: *Object* describing a particular revision of a particular
-             repository of a lab
+             repository of a lab (described earlier)
 
 *** LabManager
 
@@ -163,11 +176,14 @@
 	    .
           - host3 - ::
        + runtime :: runtime characterstics of the labmanager
-          - start_time - :: timestamp the labmanager was instantiated
+          - starttime - :: timestamp the labmanager was instantiated
 
 *** Host
 
-     A physical host entity managed by a lab-manager and hosting a single vm-manager
+     A physical server that hosts the labs. It constitutes a
+     vm-manager that is responsible for managing all the vms on the
+     host.
+
        - Host - :: Entity representing a physical host
               + hostname - :: Common name of the host
               + vmmgr - :: *Object* representation of the vm-manager
@@ -204,26 +220,27 @@
                      + vmid1 - ::
                      + vmid2 - ::
                        .
+		       .
                      + vmidn - ::
                   - ips - :: List of available ips
                      + ip1 - ::
                      + ip2 - ::
                        .
 		       .
+		       .
 		     + ipn - ::
               + runtime - :: Runtime properties
                  - status - :: up, down, stopped
-                 - start_time - :: start timestamp 
+                 - starttime - :: start timestamp 
 
 *** VM
 
     A VM is a running instance of a lab.
 
  - vm - :: An active instance of a lab that runs on a specified host
-
-    + guid - :: Global Universal id of the vm generated to identify the
-    VM universally (never ever repeated in time). It can be used to
-    refer to a particular VM that exists or ever existed before.
+    + guid - :: Global Universal id of the vm generated to identify
+      the VM universally (never ever repeated in time). It can be used
+      to refer to a particular VM that exists or ever existed before.
     + vmid - :: Unique identification of a vm amoung its current running
       VMs. This is allocated from a defined pool of ids when the vm is
       created and re-sent to the pool when the vm gets destructed.
@@ -240,12 +257,17 @@
     + stats - :: *Object* describing stats of a vm
         - userstats - :: User-level statistics of the vm
             + userinfo - :: 
-        - perfstats - :: 
+        - perfstats - :: Performance statistics
             + cpuinfo - ::
             + meminfo - ::
             + netinfo - ::
 			  
 ** Relationships
+
+#+CAPTION: Relationships
+#+ATTR_LaTeX: width=12cm
+[[file:relationships.jpg]]
+
 *** LabDepository - repository - revision
 
  [ Lab-Depository ] 1 -------------- *[ repo ] 1 ---------- * [ rev ]
@@ -259,41 +281,65 @@
  [ Labmanager ] * ------- * [ host ] 1 ------ 1 [ vmmgr ] 1 ------- * [ vm ] 1-------1 [ lab ]
 
 ** Workflows
-*** Lab Developer Workflows
 **** Create a Lab
-      [[ ./Create-a-Lab.jpg ]]
+
+#+CAPTION: Create a Lab
+#+ATTR_LaTeX: width=16cm
+[[file:Create-a-Lab.jpg]]
+
 **** Update a Lab
-       [[ ./Update-a-lab.jpg ]]
+
+#+CAPTION: Update a Lab
+#+ATTR_LaTeX: width=12cm
+[[file:Update-a-lab.jpg]]
+
 **** Test a Lab
-       [[./Test-a-Lab.jpg ]]
+
+#+CAPTION: Test a Lab
+#+ATTR_LaTeX: width=16cm
+[[file:Test-a-lab.jpg]]
+
 **** Release a Lab
-       [[./Release-a-Lab.jpg ]]
+
+#+CAPTION: Release a Lab
+#+ATTR_LaTeX: width=16cm
+[[file:Release-a-lab.jpg]]
+
 **** Delete a Lab
-       [[./Delete-a-lab.jpg]]
+
+#+CAPTION: Delete a Lab
+#+ATTR_LaTeX: width=16cm
+[[file:Delete-a-lab.jpg]]
+
 **** Fetch Lab-Statistics
-       [[ ./Fetch-lab-statistics.jpg ]]
-*** Lab Administrator Workflows
-**** Create a Lab Repository
-**** Delete a Lab Repository
-**** Update Resource Information
-     - Physical Machine Resources
+
+#+CAPTION: Delete a Lab
+#+ATTR_LaTeX: width=16cm
+[[file:Fetch-lab-statistics.jpg]]
+
+**** Update Lab Information
+     - Host Parameters
      - Network Parameters
      - VM Manager Information
-**** Update Lab Backup Schedule 
-**** Take a Lab run-time snapshot
-**** Restore a Lab from its snapshot backup
-**** Deactivate a Lab
+     - VM Parameters
+     - Backup Schedule
+     - Lab Status (Deactivate a Lab)
+     - Purge VM Logs
+**** Take a Lab snapshot (backup)
+**** Restore a Lab from its snapshot (backup)
 **** Monitor VM Statistics
-**** Modify VM Run-time Parameters
-**** Purge a VM
-**** Purge VM logs
-*** User Workflows
-*** View a Lab
-*** Other Implicit Workflows
-*** Log Lab Information
-*** AutoPurge Lab History
+**** View a Lab
+**** Log Lab History
+**** AutoPurge Lab History
+
+     
 * Components and Interfaces
  - Following are the components that need to be designed for the proposed architecture:
+
+#+CAPTION: LabManager to VMManager Interface
+#+ATTR_LaTeX: width=16cm
+   [[file:labmgr-vmmgr.jpg]]   
+
 ** Lab Manager
 
     - LabOperator :: Manages basic operations for the life-cycle management of lab
@@ -371,6 +417,11 @@
 
       + applyconfig(configid)
     
+
+#+CAPTION: Other Interfaces
+#+ATTR_LaTeX: width=16cm
+   [[file:Other-Interfaces.jpg]]   
+
 ** DeveloperPortal
 
     - createdepository(lab)
@@ -393,30 +444,79 @@
     - VMManagerHistory
     - LabManagerHistory
 
+
 * Network Architecture
   Presented below is a network architecture diagram of the proposed
   solution:
-   [[./network-infrastructure.jpg ][Network]]
 
-* Security Architecture
+#+CAPTION: Network Architecture
+#+ATTR_LaTeX: width=16cm
+   [[file:network-infrastructure.jpg]] 
+
+   - End-users :: They access the labs through a public-url (eg:
+                  http://vlabs.ac.in/labid-test ). Internally, the
+                  requests are proxied to the actual labvms through a
+                  web-proxy over port 80
+
+   - Lab-developers :: 
+        + Access to the management-portal is through a public url which
+          gets mapped to the portal over port 80.
+        + Access to the lab-vms is by a using a forwarding-gateway(eg:
+          gateway.virtual-labs.ac.in) that tunnels SSH(Port 22)
+          requests to their lab-vms for linux VMs and 
+          Remote-Desktop(Port 3389) requests for windows VMs.
+	+ Access to the lab-depository is by using a direct SSH(Port 22)
+          tunnel to the version-control server.
+* Security
 
   - Firewall rules are configured at the router-interface for
-    translating public requests to private requests.
+    translating public requests to private requests. These rules allow
+    only specific requests on specific ports (as described above) and
+    block all other requests.
 
   - Labs are accessed by users through a web-proxy that logically
     isolates the actual lab-instances from public world. In any case,
-    the security of the web-proxy host is compromised. The web-proxy
-    can be configured for additional security and monitored for user
-    statistics. Additionally, only specific ports are enabled so that
-    the labs can be accessed over web.
+    the security of only the web-proxy host is compromised. The
+    web-proxy can be configured for additional security and monitored
+    for user statistics.
 
   - Labs are accessed by lab-developers using a gateway that isolates
-    the actual lab-vms from the public world. Additionally, the
-    lab-vms are proposed to be in a separate sub-network for
-    additional security.
+    the actual lab-vms from the public world. So, in any case the
+    security of only the gateway is compromised.
 
-* Performance Model
+  - All SSH access requests are authenticated by the lab-developer
+    LDAP which would be administered by the VLEAD Admin team.
+
+* Performance
+  
+  - The lab-developer is responsible for performance of the lab and
+    hence suggest VLEAD admin the appropriate required memory and cpu
+    parameters for creating a VM for the lab.
+
+  - Overall network-performance of all labs would be shared across a
+    4Mbps:4Mbps(upward:downward) network link.
+
 * Reliability and Availability Model
+
+  - Redundant network-links would to be configured to make sure labs are
+    available 24*7
+
 * Backup Model  
-  - All labs would be backedup
-* Scalablility Model
+
+#+CAPTION: Backup Model
+#+ATTR_LaTeX: width=8cm
+   [[file:backup-model.jpg]]
+
+  - All labs would be backedup as per the following schedule. For full
+    backups, the whole image of the VM would be backedup. For
+    incremental backups, the lab-developer has to specify the
+    appropriate files to be backed-up.
+
+|------------------------------------+-----------|
+| Type of Backup                     | Schedule  |
+|------------------------------------+-----------|
+| Auto Full(VM level)                | Weekly    |
+| Auto Incremental(Filesystem level) | Daily     |
+| Full/Incremental                   | OnRequest |
+|------------------------------------+-----------|
+

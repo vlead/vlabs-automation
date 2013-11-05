@@ -1,4 +1,4 @@
-% Created 2013-11-05 Tue 17:40
+% Created 2013-11-06 Wed 00:40
 \documentclass[11pt]{article}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
@@ -24,9 +24,9 @@
 \floatplacement{table}{H}
 \newcommand{\hilight}[1]{\colorbox{yellow}{#1}}
 
-\title{Design Specifications for ``Hosting of Virtual-labs using the one-lab-per-vm model''}
+\title{Design Specifications for ``Hosting of Virtual-labs using the One-lab-per-VM model''}
 \author{Suraj Samal}
-\date{05 November 2013}
+\date{06 November 2013}
 
 \begin{document}
 
@@ -35,7 +35,6 @@
 \setcounter{tocdepth}{3}
 \tableofcontents
 \vspace*{1cm}
-\listoftables
 \listoffigures
 
 \section{Introduction}
@@ -59,38 +58,53 @@
 \label{sec-2}
 
 
-\begin{description}
-\item [Current Revision] 0.1
-\item [Revision Date] 2013-11-04
-\end{description}
+
+\begin{center}
+\begin{tabular}{lr}
+\hline
+ Current Revision  &         0.1  \\
+\hline
+ Revision Date     &  2013-11-04  \\
+\hline
+\end{tabular}
+\end{center}
+
+
+
 \section{Basic Architecture}
 \label{sec-3}
 
-\subsection{Overview}
+
+   \textbf{Figure-1} represents a basic overview of the overall system, its
+   sub-components describing all the actors, entities and they
+   interface with each other
+
+   \begin{figure}[htb]
+\centering
+\includegraphics[width=16cm]{overview.jpg}
+\caption{Overview}
+\end{figure}
+\subsection{Actors}
 \label{sec-3.1}
 
-   Below is an overview of the overall system describing all the
-   actors, entities and their interfaces:
-   \hyperref[[[file:overview.jpg]{file:overview.jpg} ]]
-\subsection{Actors}
-\label{sec-3.2}
-
 \subsubsection{Lab Developer}
-\label{sec-3.2.1}
+\label{sec-3.1.1}
 
    An person who has agreed to use the services of VLEAD as per the
    \textbf{terms of association} and follows certain standard processes to
    maintain his/her lab during its development life-cycle. In
    specific, the roles are as follows:
 \begin{itemize}
-\item Checkin the lab contents (sources,dependencies, scripts and other files) into a lab-depository.
+\item Checkin the lab contents (repositories containing
+       sources,dependencies,scripts and other files) into a
+       lab-depository.
 \item Keep updating the lab-depository with newer revisons of lab contents.
 \item Instantiate a test lab-instance for testing and debugging issues.
 \item Instantiate a live lab-instance.
 \item View live lab-instance statistics.
 \end{itemize}
 \subsubsection{Lab Administrator}
-\label{sec-3.2.2}
+\label{sec-3.1.2}
 
    An actor who is responsible for administering all the hosted
    labs. In specific, the roles are as follows:
@@ -101,19 +115,22 @@
        vmid pools) to the labmanager and vmmanager
 \end{itemize}
 \subsubsection{Lab User}
-\label{sec-3.2.3}
+\label{sec-3.1.3}
 
-   These are end-users who use the virtual-labs and its experiments
+   These are end-users who use the virtual-labs and run its
+   experiments.
 \subsection{Entities}
-\label{sec-3.3}
+\label{sec-3.2}
 
 \subsubsection{LabDepository}
-\label{sec-3.3.1}
+\label{sec-3.2.1}
 
 
      All labs are allocated a unique-id and a lab-depository by the
      labs administrator. A lab-depository represents a collection of
-     various repositories associated with a lab.
+     various repositories associated with a lab. Each depository has a
+     \textbf{metadata} repository which is automatically regenerated when any
+     of the repositories are modified.
 
 \begin{description}
 \item [lab-depository -] An \textbf{Object} describing the property of all
@@ -145,14 +162,14 @@
                            everytime the lab-developer makes a commit
                            to other repositories.
 
-\begin{itemize}
+\begin{description}
 \item [numrepos -] Total number of repositories present
-\item [repoid1 -] Identification of each repositories
-\item [repoid1 -]repoid2 -
-\item [repoid1 -].
-\item [repoid1 -].
-\item [repoid1 -]repoidN -
-\end{itemize}
+\item [repoid1 -] Identification of each repository
+\item [repoid2 -]
+\item [repoid2 -].
+\item [repoid2 -].
+\item [repoidN -]
+\end{description}
 
 \item [repo1 -] A repository \textbf{object} which refers to a svn, git or bzr repository
 
@@ -174,6 +191,7 @@
 \begin{description}
 \item [dep1]
 \item [dep2]
+                      .
                       .
                       .
 \item [depn]
@@ -200,6 +218,7 @@
 \item [repo2 -]
 \item [repo2 -].
 \item [repo2 -].
+\item [repo2 -].
 \item [repoN -]
 \end{description}
 
@@ -207,7 +226,7 @@
 
 \end{description}
 \subsubsection{Lab}
-\label{sec-3.3.2}
+\label{sec-3.2.2}
 
 
     An instance of a lab (inactive)  which refers to a complete set of
@@ -221,15 +240,15 @@
 
 \begin{description}
 \item [labid -] Unique id to identify the lab from others
-\item [labinfo -] \textbf{Object} describing basic properties of a lab
-\item [repo -] \textbf{Object} describing a particular repository of a lab
+\item [labinfo -] \textbf{Object} describing basic properties of a lab (described earlier)
+\item [repo -] \textbf{Object} describing a particular repository of a lab (described earlier)
 \item [rev -] \textbf{Object} describing a particular revision of a particular
-             repository of a lab
+             repository of a lab (described earlier)
 \end{description}
 
 \end{description}
 \subsubsection{LabManager}
-\label{sec-3.3.3}
+\label{sec-3.2.3}
 
 
      An entity that monitors a set of physical hosts, accepts requests for
@@ -259,17 +278,20 @@
 \item [runtime] runtime characterstics of the labmanager
 
 \begin{description}
-\item [start$_{\mathrm{time}}$ -] timestamp the labmanager was instantiated
+\item [starttime -] timestamp the labmanager was instantiated
 \end{description}
 
 \end{description}
 
 \end{description}
 \subsubsection{Host}
-\label{sec-3.3.4}
+\label{sec-3.2.4}
 
 
-     A physical host entity managed by a lab-manager and hosting a single vm-manager
+     A physical server that hosts the labs. It constitutes a
+     vm-manager that is responsible for managing all the vms on the
+     host.
+
 \begin{description}
 \item [Host -] Entity representing a physical host
 
@@ -301,7 +323,7 @@
 
 \end{description}
 \subsubsection{VMManager}
-\label{sec-3.3.5}
+\label{sec-3.2.5}
 
 
      An entity that is responsible for managing virtual machines(vms)
@@ -330,6 +352,7 @@
 \item [vmid1 -]
 \item [vmid2 -]
                        .
+                       .
 \item [vmidn -]
 \end{description}
 
@@ -338,6 +361,7 @@
 \begin{description}
 \item [ip1 -]
 \item [ip2 -]
+                       .
                        .
                        .
 \item [ipn -]
@@ -349,14 +373,14 @@
 
 \begin{description}
 \item [status -] up, down, stopped
-\item [start$_{\mathrm{time}}$ -] start timestamp
+\item [starttime -] start timestamp
 \end{description}
 
 \end{description}
 
 \end{description}
 \subsubsection{VM}
-\label{sec-3.3.6}
+\label{sec-3.2.6}
 
 
     A VM is a running instance of a lab.
@@ -365,9 +389,9 @@
 \item [vm -] An active instance of a lab that runs on a specified host
 
 \begin{description}
-\item [guid -] Global Universal id of the vm generated to identify the
-\end{description}
-
+\item [guid -] Global Universal id of the vm generated to identify
+      the VM universally (never ever repeated in time). It can be used
+      to refer to a particular VM that exists or ever existed before.
 \item [vmid -] Unique identification of a vm amoung its current running
       VMs. This is allocated from a defined pool of ids when the vm is
       created and re-sent to the pool when the vm gets destructed.
@@ -398,7 +422,7 @@
 \item [userinfo -]
 \end{description}
 
-\item [perfstats -]
+\item [perfstats -] Performance statistics
 
 \begin{description}
 \item [cpuinfo -]
@@ -409,140 +433,159 @@
 \end{description}
 
 \end{description}
+
+\end{description}
 \subsection{Relationships}
-\label{sec-3.4}
+\label{sec-3.3}
+
+
+\begin{figure}[htb]
+\centering
+\includegraphics[width=12cm]{relationships.jpg}
+\caption{Relationships}
+\end{figure}
 
 \subsubsection{LabDepository - repository - revision}
-\label{sec-3.4.1}
+\label{sec-3.3.1}
 
 
  [ Lab-Depository ] 1 -------------- *[ repo ] 1 ---------- * [ rev ]
 
 \subsubsection{Lab - repository - revision}
-\label{sec-3.4.2}
+\label{sec-3.3.2}
 
 
  [ Lab ] 1 -------- 1 [ repo ] 1 ------ 1 [ rev ]
 
 \subsubsection{LabManager - host - vmmgr - vm - lab}
-\label{sec-3.4.3}
+\label{sec-3.3.3}
 
 
  [ Labmanager ] * ------- * [ host ] 1 ------ 1 [ vmmgr ] 1 ------- * [ vm ] 1-------1 [ lab ]
 
-\subsection{Workflows}
-\label{sec-3.5}
-
-\subsubsection{Lab Developer Workflows}
-\label{sec-3.5.1}
-
 \begin{itemize}
 
 \item Create a Lab\\
-\label{sec-3.5.1.1}
+\label{sec-3.4.1}
 
-      \hyperref[sec-3.5.1.1]{ ./Create-a-Lab.jpg }
+
+\begin{figure}[htb]
+\centering
+\includegraphics[width=16cm]{Create-a-Lab.jpg}
+\caption{Create a Lab}
+\end{figure}
+
 
 \item Update a Lab\\
-\label{sec-3.5.1.2}
+\label{sec-3.4.2}
 
-       \hyperref[sec-3.5.1.2]{ ./Update-a-lab.jpg }
+
+\begin{figure}[htb]
+\centering
+\includegraphics[width=12cm]{Update-a-lab.jpg}
+\caption{Update a Lab}
+\end{figure}
+
 
 \item Test a Lab\\
-\label{sec-3.5.1.3}
+\label{sec-3.4.3}
 
-       \href{file://../Test-a-Lab.jpg }{./Test-a-Lab.jpg }
+
+\begin{figure}[htb]
+\centering
+\includegraphics[width=16cm]{Test-a-lab.jpg}
+\caption{Test a Lab}
+\end{figure}
+
 
 \item Release a Lab\\
-\label{sec-3.5.1.4}
+\label{sec-3.4.4}
 
-       \href{file://../Release-a-Lab.jpg }{./Release-a-Lab.jpg }
+
+\begin{figure}[htb]
+\centering
+\includegraphics[width=16cm]{Release-a-lab.jpg}
+\caption{Release a Lab}
+\end{figure}
+
 
 \item Delete a Lab\\
-\label{sec-3.5.1.5}
+\label{sec-3.4.5}
 
-       \includegraphics[width=10em]{./Delete-a-lab.jpg}
+
+\begin{figure}[htb]
+\centering
+\includegraphics[width=16cm]{Delete-a-lab.jpg}
+\caption{Delete a Lab}
+\end{figure}
+
 
 \item Fetch Lab-Statistics\\
-\label{sec-3.5.1.6}
-
-       \hyperref[sec-3.5.1.6]{ ./Fetch-lab-statistics.jpg }
-\end{itemize} % ends low level
-\subsubsection{Lab Administrator Workflows}
-\label{sec-3.5.2}
-
-\begin{itemize}
-
-\item Create a Lab Repository\\
-\label{sec-3.5.2.1}
+\label{sec-3.4.6}
 
 
-\item Delete a Lab Repository\\
-\label{sec-3.5.2.2}
+\begin{figure}[htb]
+\centering
+\includegraphics[width=16cm]{Fetch-lab-statistics.jpg}
+\caption{Delete a Lab}
+\end{figure}
 
 
-\item Update Resource Information\\
-\label{sec-3.5.2.3}
+\item Update Lab Information\\
+\label{sec-3.4.7}
 
 \begin{itemize}
-\item Physical Machine Resources
+\item Host Parameters
 \item Network Parameters
 \item VM Manager Information
+\item VM Parameters
+\item Backup Schedule
+\item Lab Status (Deactivate a Lab)
+\item Purge VM Logs
 \end{itemize}
 
-\item Update Lab Backup Schedule\\
-\label{sec-3.5.2.4}
+\item Take a Lab snapshot (backup)\\
+\label{sec-3.4.8}
 
 
-\item Take a Lab run-time snapshot\\
-\label{sec-3.5.2.5}
-
-
-\item Restore a Lab from its snapshot backup\\
-\label{sec-3.5.2.6}
-
-
-\item Deactivate a Lab\\
-\label{sec-3.5.2.7}
+\item Restore a Lab from its snapshot (backup)\\
+\label{sec-3.4.9}
 
 
 \item Monitor VM Statistics\\
-\label{sec-3.5.2.8}
+\label{sec-3.4.10}
 
 
-\item Modify VM Run-time Parameters\\
-\label{sec-3.5.2.9}
+\item View a Lab\\
+\label{sec-3.4.11}
 
 
-\item Purge a VM\\
-\label{sec-3.5.2.10}
+\item Log Lab History\\
+\label{sec-3.4.12}
 
 
-\item Purge VM logs\\
-\label{sec-3.5.2.11}
+\item AutoPurge Lab History\\
+\label{sec-3.4.13}
 
+
+     
 \end{itemize} % ends low level
-\subsubsection{User Workflows}
-\label{sec-3.5.3}
-
-\subsubsection{View a Lab}
-\label{sec-3.5.4}
-
-\subsubsection{Other Implicit Workflows}
-\label{sec-3.5.5}
-
-\subsubsection{Log Lab Information}
-\label{sec-3.5.6}
-
-\subsubsection{AutoPurge Lab History}
-\label{sec-3.5.7}
+\subsection{Workflows}
+\label{sec-3.4}
 
 \section{Components and Interfaces}
 \label{sec-4}
 
 \begin{itemize}
 \item Following are the components that need to be designed for the proposed architecture:
+
+   \begin{figure}[htb]
 \end{itemize}
+\centering
+\includegraphics[width=16cm]{labmgr-vmmgr.jpg}
+\caption{LabManager to VMManager Interface}
+\end{figure}   
+
 \subsection{Lab Manager}
 \label{sec-4.1}
 
@@ -654,6 +697,13 @@
 
 \end{description}
     
+
+   \begin{figure}[htb]
+\centering
+\includegraphics[width=16cm]{Other-Interfaces.jpg}
+\caption{Other Interfaces}
+\end{figure}   
+
 \subsection{DeveloperPortal}
 \label{sec-4.3}
 
@@ -690,40 +740,101 @@
 
   Presented below is a network architecture diagram of the proposed
   solution:
-   \href{file://../network-infrastructure.jpg }{Network}
 
-\section{Security Architecture}
+   \begin{figure}[htb]
+\centering
+\includegraphics[width=16cm]{network-infrastructure.jpg}
+\caption{Network Architecture}
+\end{figure} 
+
+\begin{description}
+\item [End-users] They access the labs through a public-url (eg:
+                  \href{http://vlabs.ac.in/labid-test}{http://vlabs.ac.in/labid-test} ). Internally, the
+                  requests are proxied to the actual labvms through a
+                  web-proxy over port 80
+\item [Lab-developers]
+
+\begin{itemize}
+\item Access to the management-portal is through a public url which
+          gets mapped to the portal over port 80.
+\item Access to the lab-vms is by a using a forwarding-gateway(eg:
+          gateway.virtual-labs.ac.in) that tunnels SSH(Port 22)
+          requests to their lab-vms for linux VMs and 
+          Remote-Desktop(Port 3389) requests for windows VMs.
+\item Access to the lab-depository is by using a direct SSH(Port 22)
+          tunnel to the version-control server.
+\end{itemize}
+
+\end{description}
+\section{Security}
 \label{sec-6}
 
 
 \begin{itemize}
 \item Firewall rules are configured at the router-interface for
-    translating public requests to private requests.
+    translating public requests to private requests. These rules allow
+    only specific requests on specific ports (as described above) and
+    block all other requests.
 \item Labs are accessed by users through a web-proxy that logically
     isolates the actual lab-instances from public world. In any case,
-    the security of the web-proxy host is compromised. The web-proxy
-    can be configured for additional security and monitored for user
-    statistics. Additionally, only specific ports are enabled so that
-    the labs can be accessed over web.
+    the security of only the web-proxy host is compromised. The
+    web-proxy can be configured for additional security and monitored
+    for user statistics.
 \item Labs are accessed by lab-developers using a gateway that isolates
-    the actual lab-vms from the public world. Additionally, the
-    lab-vms are proposed to be in a separate sub-network for
-    additional security.
+    the actual lab-vms from the public world. So, in any case the
+    security of only the gateway is compromised.
+\item All SSH access requests are authenticated by the lab-developer
+    LDAP which would be administered by the VLEAD Admin team.
 \end{itemize}
-\section{Performance Model}
+\section{Performance}
 \label{sec-7}
 
+  
+\begin{itemize}
+\item The lab-developer is responsible for performance of the lab and
+    hence suggest VLEAD admin the appropriate required memory and cpu
+    parameters for creating a VM for the lab.
+\item Overall network-performance of all labs would be shared across a
+    4Mbps:4Mbps(upward:downward) network link.
+\end{itemize}
 \section{Reliability and Availability Model}
 \label{sec-8}
 
+
+\begin{itemize}
+\item Redundant network-links would to be configured to make sure labs are
+    available 24*7
+\end{itemize}
 \section{Backup Model}
 \label{sec-9}
 
+
+   \begin{figure}[htb]
+\centering
+\includegraphics[width=8cm]{backup-model.jpg}
+\caption{Backup Model}
+\end{figure}
+
 \begin{itemize}
-\item All labs would be backup
+\item All labs would be backedup as per the following schedule. For full
+    backups, the whole image of the VM would be backedup. For
+    incremental backups, the lab-developer has to specify the
+    appropriate files to be backed-up.
 \end{itemize}
-\section{Scalablility Model}
-\label{sec-10}
+
+\begin{center}
+\begin{tabular}{ll}
+\hline
+ Type of Backup                      &  Schedule   \\
+\hline
+ Auto Full(VM level)                 &  Weekly     \\
+ Auto Incremental(Filesystem level)  &  Daily      \\
+ Full/Incremental                    &  OnRequest  \\
+\hline
+\end{tabular}
+\end{center}
+
+
 
 
 \end{document}
