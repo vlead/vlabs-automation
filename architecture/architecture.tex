@@ -1,4 +1,4 @@
-% Created 2013-11-05 Tue 00:41
+% Created 2013-11-05 Tue 17:40
 \documentclass[11pt]{article}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
@@ -58,6 +58,7 @@
 \section{Document Revision}
 \label{sec-2}
 
+
 \begin{description}
 \item [Current Revision] 0.1
 \item [Revision Date] 2013-11-04
@@ -68,11 +69,9 @@
 \subsection{Overview}
 \label{sec-3.1}
 
-   Below is an overview of the overall system
-   describing all the actors, entities and their interfaces:
-
-   \href{file://../architecture.jpg }{Architecture}
-
+   Below is an overview of the overall system describing all the
+   actors, entities and their interfaces:
+   \hyperref[[[file:overview.jpg]{file:overview.jpg} ]]
 \subsection{Actors}
 \label{sec-3.2}
 
@@ -136,15 +135,26 @@
 
 \end{description}
 
-\item [labmetadata -] A structured \textbf{object} representation of depository
-                     contents describing the number of repos present,
-                     actual repos present, their type . This is regenerated
-                     everytime the lab-developer makes a commit to a
-                     repository.
+\item [repos -] Collection of repositories
 
 \begin{description}
-\item [numrepos -] Sum of all repositories present in the repository
-\item [repo -] A repository \textbf{object} which refers to a svn, git or bzr repository
+\item [metadata -]  A structured \textbf{object} representation of
+                           depository contents describing the number
+                           of repos present, actual repos present,
+                           their type . This repository is regenerated
+                           everytime the lab-developer makes a commit
+                           to other repositories.
+
+\begin{itemize}
+\item [numrepos -] Total number of repositories present
+\item [repoid1 -] Identification of each repositories
+\item [repoid1 -]repoid2 -
+\item [repoid1 -].
+\item [repoid1 -].
+\item [repoid1 -]repoidN -
+\end{itemize}
+
+\item [repo1 -] A repository \textbf{object} which refers to a svn, git or bzr repository
 
 \begin{description}
 \item [repoid -] Identification text that can be used to checkout the repository. (Eg: cse01, mech09 )
@@ -187,6 +197,10 @@
 
 \end{description}
 
+\item [repo2 -]
+\item [repo2 -].
+\item [repo2 -].
+\item [repoN -]
 \end{description}
 
 \end{description}
@@ -218,8 +232,8 @@
 \label{sec-3.3.3}
 
 
-     An entity that monitors a set of hosts, accepts requests for
-     creation, modification and deletion of labinstances and sends
+     An entity that monitors a set of physical hosts, accepts requests for
+     creation, modification and deletion of lab-instances and sends
      request to appropriate vm-manager for life-cycle management of
      labinstances
 
@@ -277,7 +291,7 @@
 
 \begin{description}
 \item [status -] one of running, stopped, shutoff
-\item [start$_{\mathrm{time}}$ -] timestamp the host was started
+\item [starttime -] timestamp the host was started
 \item [useddiskspace -] (Eg. 100GB)
 \item [usedmem -] (Eg. 20GB)
 \item [usedcpu -] (Eg. 1)
@@ -292,6 +306,7 @@
 
      An entity that is responsible for managing virtual machines(vms)
      on a particular host
+
 \begin{description}
 \item [vmmgr -] Entity describing an instance of a vm-manager
                    residing on a physical machine
@@ -305,7 +320,7 @@
 \item [vm2 -]
 \end{description}
 
-\item [vmn -]
+\item [vmN -]
 \item [resources -] \textbf{Object} representation of resources
 
 \begin{description}
@@ -426,37 +441,48 @@
 \item Create a Lab\\
 \label{sec-3.5.1.1}
 
+      \hyperref[sec-3.5.1.1]{ ./Create-a-Lab.jpg }
 
 \item Update a Lab\\
 \label{sec-3.5.1.2}
 
+       \hyperref[sec-3.5.1.2]{ ./Update-a-lab.jpg }
 
 \item Test a Lab\\
 \label{sec-3.5.1.3}
 
+       \href{file://../Test-a-Lab.jpg }{./Test-a-Lab.jpg }
 
 \item Release a Lab\\
 \label{sec-3.5.1.4}
 
+       \href{file://../Release-a-Lab.jpg }{./Release-a-Lab.jpg }
 
 \item Delete a Lab\\
 \label{sec-3.5.1.5}
 
+       \includegraphics[width=10em]{./Delete-a-lab.jpg}
 
 \item Fetch Lab-Statistics\\
 \label{sec-3.5.1.6}
 
+       \hyperref[sec-3.5.1.6]{ ./Fetch-lab-statistics.jpg }
+\end{itemize} % ends low level
+\subsubsection{Lab Administrator Workflows}
+\label{sec-3.5.2}
+
+\begin{itemize}
 
 \item Create a Lab Repository\\
-\label{sec-3.6.1}
+\label{sec-3.5.2.1}
 
 
 \item Delete a Lab Repository\\
-\label{sec-3.6.2}
+\label{sec-3.5.2.2}
 
 
 \item Update Resource Information\\
-\label{sec-3.6.3}
+\label{sec-3.5.2.3}
 
 \begin{itemize}
 \item Physical Machine Resources
@@ -465,55 +491,51 @@
 \end{itemize}
 
 \item Update Lab Backup Schedule\\
-\label{sec-3.6.4}
+\label{sec-3.5.2.4}
 
 
 \item Take a Lab run-time snapshot\\
-\label{sec-3.6.5}
+\label{sec-3.5.2.5}
 
 
 \item Restore a Lab from its snapshot backup\\
-\label{sec-3.6.6}
+\label{sec-3.5.2.6}
 
 
 \item Deactivate a Lab\\
-\label{sec-3.6.7}
+\label{sec-3.5.2.7}
 
 
 \item Monitor VM Statistics\\
-\label{sec-3.6.8}
+\label{sec-3.5.2.8}
 
 
 \item Modify VM Run-time Parameters\\
-\label{sec-3.6.9}
+\label{sec-3.5.2.9}
 
 
 \item Purge a VM\\
-\label{sec-3.6.10}
+\label{sec-3.5.2.10}
 
 
 \item Purge VM logs\\
-\label{sec-3.6.11}
+\label{sec-3.5.2.11}
 
 \end{itemize} % ends low level
-\subsection{Lab Administrator Workflows}
-\label{sec-3.6}
-
-\subsection{User Workflows}
-\label{sec-3.7}
+\subsubsection{User Workflows}
+\label{sec-3.5.3}
 
 \subsubsection{View a Lab}
-\label{sec-3.7.1}
+\label{sec-3.5.4}
 
-\subsection{Other Implicit Workflows}
-\label{sec-3.8}
+\subsubsection{Other Implicit Workflows}
+\label{sec-3.5.5}
 
 \subsubsection{Log Lab Information}
-\label{sec-3.8.1}
+\label{sec-3.5.6}
 
 \subsubsection{AutoPurge Lab History}
-\label{sec-3.8.2}
-
+\label{sec-3.5.7}
 
 \section{Components and Interfaces}
 \label{sec-4}
@@ -525,48 +547,149 @@
 \label{sec-4.1}
 
 
+\begin{description}
+\item [LabOperator] Manages basic operations for the life-cycle management of lab
+
 \begin{itemize}
-\item LabOperator
-\item LabMonitor
-\item LabLogger
-\item LabStatsCollector
+\item createLab(vmmanager, lab)
+\item updateLab(vmmanager, lab)
+\item deleteLab(vmmanager, lab)
+\item updateresources() - Adds or removes resources information (Eg. vmmanager, hosts)
 \end{itemize}
+
+\item [LabMonitor] Regularly monitors the status of labs and vms
+
+\begin{itemize}
+\item ping(vmmanager, lab)
+\end{itemize}
+
+\item [LabLogger]  Logs status and history information to the lab-info database
+
+\begin{itemize}
+\item loginfo()
+\item logwarn()
+\item logerror()
+\item purgelogs()
+\end{itemize}
+
+\item [LabStatsCollector]
+
+\begin{itemize}
+\item collectvmstats(vmmanager)
+\item collectlabstats(vmmanager, lab)
+\item collectrepostats(lab)
+\item updatevmstatstoDB()
+\item updatelabstatstoDB()
+\end{itemize}
+
+\item [BackupManager]
+
+\begin{itemize}
+\item backup(vmmanager, lab)
+\item restore(vmmanager, lab)
+\item schedule(lab)
+\end{itemize}
+
+\end{description}
 \subsection{VM Manager}
 \label{sec-4.2}
 
 
+\begin{description}
+\item [VMOperator] Manages basic operations for life-cycle of a vm and a lab
+
 \begin{itemize}
-\item VMOperator
-\item VMMonitor
-\item CommandsGenerator
-\item CommandExecutor
-\item VMLogger
-\item VMStatsCollector
+\item createvm(lab)
+\item updatevm(vmid)
+\item deletevm(vmid)
+\item stopvm(vmid)
+\item startvm(vmid)
+\item updateresources(host)
+\item checkoutlab(vmid, lab)
+\item buildlab(vmid, lab)
+\item deploylab(vmid, lab)
+\item activatelab(vmid, lab)
+\item testlab(vmid, lab)
+\item restorelab(lab, snapshot)
+\item backuplab (lab, snapshot)
+\item updateinfotoDB()
 \end{itemize}
+
+\item [VMMonitor]
+
+\begin{itemize}
+\item pinglab(lab)
+\item getcpuinfo(vmid)
+\item getmemusage(vmid)
+\item getnetworkusage(vmid)
+\item getuserstats(vmid)
+\item getcpuinfo(host)
+\item getmemusage(host)
+\item getnetworkusage(host)
+\end{itemize}
+
+\item [VMLogger]
+
+\begin{itemize}
+\item loginfo()
+\item logwarn()
+\item logerror()
+\item purgelogs()
+\end{itemize}
+
+\item [CommandsGenerator] A component that generates the
+         configuration commands based on operation specified by the
+         VMOperator
+
+\begin{itemize}
+\item generateconfig(configid)
+\end{itemize}
+
+\item [CommandExecutor] A component that runs the configuration
+         commands generated earlier by the CommandsGenerator
+
+\begin{itemize}
+\item applyconfig(configid)
+\end{itemize}
+
+\end{description}
     
 \subsection{DeveloperPortal}
 \label{sec-4.3}
 
-   
+
+\begin{itemize}
+\item createdepository(lab)
+\item createrepository(labdepository, lab)
+\item updaterepository(labdepository, lab)
+\item deleterepostitory(labdepository, l
+\item deletedepository(lab)
+\item sendrequest(labmanager, lab, operation) - Operation could be one of  create/update/test/release a lab or getlabstats
+\item updateresources(labmanager) - Information about physical-hosts, network parameters etc
+\end{itemize}
 \subsection{DeploymentDashboard}
 \label{sec-4.4}
 
 
+\begin{itemize}
+\item getlabsStatus(labmanager)
+\item getlabsHistory(labInfoDb)
+\end{itemize}
 \subsection{LabInfoDatabase}
 \label{sec-4.5}
 
+
 \begin{itemize}
-\item VMStats
+\item VMHistory
+\item LabHistory
+\item VMManagerHistory
+\item LabManagerHistory
 \end{itemize}
-\subsection{}
-
-
 \section{Network Architecture}
 \label{sec-5}
 
   Presented below is a network architecture diagram of the proposed
   solution:
-
    \href{file://../network-infrastructure.jpg }{Network}
 
 \section{Security Architecture}
@@ -596,6 +719,9 @@
 \section{Backup Model}
 \label{sec-9}
 
+\begin{itemize}
+\item All labs would be backup
+\end{itemize}
 \section{Scalablility Model}
 \label{sec-10}
 
