@@ -336,11 +336,11 @@
 * Components and Interfaces
  - Following are the components that need to be designed for the proposed architecture:
 
+** Lab Manager
+
 #+CAPTION: LabManager to VMManager Interface
 #+ATTR_LaTeX: width=16cm
    [[file:labmgr-vmmgr.jpg]]   
-
-** Lab Manager
 
     - LabOperator :: Manages basic operations for the life-cycle management of lab
         + createLab(vmmanager, lab)
